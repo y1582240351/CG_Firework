@@ -17,6 +17,7 @@
 #include "particle_system.h"
 #include "utility_tool.h"
 #include "firework.h"
+#include "skybox.h"
 
 using namespace std;
 
@@ -160,7 +161,8 @@ int main()
     //glEnableVertexAttribArray(0);
 
     glEnable(GL_PROGRAM_POINT_SIZE);
-    Shader particleShader("particle_test_vs.glsl", "particle_test_fs.glsl");
+    Shader particleShader("particle_test_vs.glsl", "particle_test_texture_fs.glsl");
+    Shader skyShader("skybox_test_vs.glsl", "skybox_text_fs.glsl");
     // 测试粒子系统
     /*ParticleSystem ps(10000);*/
     //ParticleSystem* ps = new ParticleSystem(10);
@@ -176,11 +178,34 @@ int main()
     // 测试烟花
     Firework fw(4.0f);
     fireworkParam fp;
-    fp.trails_num = 1000;
+    fp.trails_num = 100;
     fp.explode_num = 0;
     fp.tp.max_trail = 60;
     fp.tp.min_trail = 40;
     fw.init(fp);
+
+    SkyBox sb;
+    /*std::vector<std::string> boxes{
+        std::string("DOOM16RT.png"),
+        std::string("DOOM16LF.png"),
+        std::string("DOOM16UP.png"),
+        std::string("DOOM16DN.png"),
+        std::string("DOOM16FT.png"),
+        std::string("DOOM16BK.png"),
+    };*/
+    std::vector<std::string> boxes{
+        std::string("right.jpg"),
+        std::string("left.jpg"),
+        std::string("top.jpg"),
+        std::string("bottom.jpg"),
+        std::string("front.jpg"),
+        std::string("back.jpg"),
+    };
+    sb.loadMap(boxes);
+
+    skyShader.use();
+    skyShader.setInt("skybox", 0);
+
 
     // render loop
     // -----------
@@ -246,12 +271,19 @@ int main()
         //glDrawArrays(GL_POINTS, 0, 36); 
 
         float delta_time = timer();
-        //particleShader.use();
+        particleShader.use();
         ////ps->explode(delta_time);
         //ps->trail(delta_time);
         //ps->draw(particleShader);
 
         fw.light(particleShader, delta_time);
+
+        skyShader.use();
+        glm::mat4 view = glm::mat4(glm::mat3(camera.GetViewMatrix())); // remove translation from the view matrix
+        glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+        skyShader.setMat4("view", view);
+        skyShader.setMat4("projection", projection);
+        sb.draw(skyShader);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 #include "firework.h"
 
 
-Firework::Firework() : time_cnt(0.0f), exploded(false){
+Firework::Firework() : time_cnt(0.0f), exploded(false) {
 
 }
 
@@ -9,15 +9,16 @@ Firework::~Firework() {
 
 }
 
-Firework::Firework(float explode_time) : time_cnt(0.0f), explode_time(explode_time), exploded(false){
-	ptr p = std::make_shared<ParticleSystem>(10);
+Firework::Firework(float explode_time) : time_cnt(0.0f), explode_time(explode_time), exploded(false) {
+	ptr p = std::make_shared<ParticleSystem>(10000);
 	Particle base;
 	base.position = glm::fvec3(0.0f, -1.0f, 0.0f);
 	base.color = glm::fvec4(0.1f, 0.4f, 0.3f, 1.0f);
-	base.velocity = glm::fvec3(0.0f, 0.1f, 0.0f);
+	base.velocity = glm::fvec3(0.0f, 0.2f, 0.0f);
 	base.size = 4.0f;
 	base.life = 10.0f;
 	p->initTrail(base);
+	ParticleSystem::setTexture("texture_img/light_PNG14421.jpg");
 	trails.push_back(p);
 }
 
@@ -37,7 +38,7 @@ void Firework::init(fireworkParam base_fwp) {
 /// </summary>
 /// <param name="shader">渲染所用的着色器</param>
 /// <param name="delta_time">每帧之间的间隔时间</param>
-void Firework::light(Shader &shader, float delta_time) {
+void Firework::light(Shader& shader, float delta_time) {
 	time_cnt += delta_time;
 	if (time_cnt < explode_time) {
 		trails[0]->trail(delta_time);
@@ -64,8 +65,9 @@ void Firework::light(Shader &shader, float delta_time) {
 void Firework::genTrails() {
 	glm::fvec3 explode_pos = trails[0]->posTrail();
 	trails.resize(fwp.trails_num);
+	ParticleSystem::setTexture("texture_img/light_PNG14421.jpg");
 	for (int i = 0; i < fwp.trails_num; ++i) {
-		ptr p = std::make_shared<ParticleSystem>(10);
+		ptr p = std::make_shared<ParticleSystem>(1000);
 		// 初始化生成的节点，参数可以改
 		Particle base;
 		base.position = explode_pos;

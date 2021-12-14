@@ -1,13 +1,22 @@
 #include "particle_system.h"
 #include "utility_tool.h"
+#include "stb_image.h"
 
-enum vbo_index{VERTEX, POS, COLOR};
+enum vbo_index { VERTEX, POS, COLOR };
 
 float ParticleSystem::vertex[3] = { 0.0f, 0.0f, 0.0f };
+int ParticleSystem::system_cnt = 0;
+GLuint ParticleSystem::texture = -1;
+
 
 ParticleSystem::~ParticleSystem() {
 	glDeleteBuffers(3, vbo);
 	glDeleteVertexArrays(1, &vao);
+
+	--system_cnt;
+	if (system_cnt == 0) {
+		deleteTexture();
+	}
 }
 
 /// <summary>
@@ -40,6 +49,8 @@ ParticleSystem::ParticleSystem(int max_particle = MAX_PARTICLE_NUM) : max_partic
 	glBufferData(GL_ARRAY_BUFFER, max_particles_num * 4 * sizeof(float), NULL, GL_STREAM_DRAW);
 	glVertexAttribPointer(COLOR, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
 	glEnableVertexAttribArray(COLOR);
+
+	++system_cnt;
 }
 
 
@@ -47,7 +58,7 @@ ParticleSystem::ParticleSystem(int max_particle = MAX_PARTICLE_NUM) : max_partic
 /// 更新粒子的颜色参数
 /// </summary>
 /// <param name="color_data">颜色参数的值</param>
-void ParticleSystem::updateColor(const float * color_data) {
+void ParticleSystem::updateColor(const float* color_data) {
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[COLOR]);
 	glBufferData(GL_ARRAY_BUFFER, MAX_PARTICLE_NUM * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, particles_num * sizeof(GLfloat) * 4, color_data);
@@ -70,8 +81,16 @@ void ParticleSystem::updatePos(const float* pos_data) {
 /// 每一帧渲染
 /// </summary>
 /// <param name="shader">渲染所用的着色器程序</param>
-void ParticleSystem::draw(Shader &shader) {
+void ParticleSystem::draw(Shader& shader) {
+	if (texture != -1) {
+		glEnable(GL_POINT_SPRITE);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	}
+	glEnable(GL_PROGRAM_POINT_SIZE);
 	shader.use();
+	if (texture != -1)
+		glBindTexture(GL_TEXTURE_2D, texture);
 	glBindVertexArray(vao);
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
@@ -81,7 +100,7 @@ void ParticleSystem::draw(Shader &shader) {
 	glVertexAttribDivisor(POS, 1);
 	glVertexAttribDivisor(COLOR, 1);
 	//glVertexAttribDivisor(SIZE, 1);
-	glDrawArraysInstanced(GL_POINTS, 0, 1, particles_num); 
+	glDrawArraysInstanced(GL_POINTS, 0, 1, particles_num);
 
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
@@ -112,10 +131,12 @@ void ParticleSystem::initTrail(Particle& base_particle) {
 /// <param name="delta_time">时间间隔</param>
 /// <returns>当前存活粒子的个数</returns>
 int ParticleSystem::trail(float delta_time) {
+	static bool showed[MAX_PARTICLE_NUM] = { 0 };
 	particles_num = 0;
-	glm::fvec3 a(0.0f, 0.05f, 0.0f); // 加速度
+	glm::fvec3 a(0.0f, -0.01f, 0.0f); // 加速度
 	float size_atten;
-	
+	bool tmp = false;
+
 	glm::fvec3 pre_pos;
 
 	for (int i = 0; i < max_particles_num; ++i) {
@@ -127,12 +148,14 @@ int ParticleSystem::trail(float delta_time) {
 				particles[i].velocity = velocityUpdate(particles[i].velocity, a, delta_time);
 				/*particles[i].size *= 0.999f;*/
 			}
-			else {
-				glm::fvec3 tmp = particles[i].position;
+			else if (!showed[i] && !tmp) {
+				//glm::fvec3 tmp = particles[i].position;
 				particles[i].position = pre_pos;
-				pre_pos = tmp;
+				//pre_pos = tmp;
+				showed[i] = true;
+				tmp = true;
 			}
-			
+
 			/*size_atten = floatRandom(0.001 * static_cast<float>(i), 0.01 * static_cast<float>(i));
 			particles[i].size *= (1 - size_atten);*/
 
@@ -155,6 +178,9 @@ int ParticleSystem::trail(float delta_time) {
 			color_data[4 * particles_num + 3] = particles[i].color.a;
 
 			particles_num++;
+		}
+		else {
+			showed[i] = false;
 		}
 	}
 	updatePos(pos_size_data);
@@ -240,3 +266,38 @@ glm::fvec3 ParticleSystem::posTrail() {
 }
 
 
+/// <summary>
+/// 为点精灵添加纹理
+/// </summary>
+/// <param name="file_name">纹理的文件路径</param>
+void ParticleSystem::setTexture(const char* file_name) {
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	// 为当前绑定的纹理对象设置环绕、过滤方式
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// 加载并生成纹理
+	int width, height, nrChannels;
+	unsigned char* data = stbi_load(file_name, &width, &height, &nrChannels, 0);
+	if (data)
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		std::cout << "Failed to load texture" << std::endl;
+	}
+	stbi_image_free(data);
+}
+
+
+
+/// <summary>
+/// 删除纹理
+/// </summary>
+void ParticleSystem::deleteTexture() {
+	glDeleteTextures(1, &texture);
+}

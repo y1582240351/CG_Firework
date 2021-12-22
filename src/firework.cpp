@@ -1,5 +1,7 @@
 #include "firework.h"
 
+// sound
+extern irrklang::ISoundEngine* SoundEngine;
 
 Firework::Firework() : time_cnt(0.0f), exploded(false) {
 
@@ -48,6 +50,7 @@ void Firework::light(Shader& shader, float delta_time) {
 		if (!exploded) { // 烟花第一次爆炸
 			exploded = true;
 			genTrails();
+			SoundEngine->play2D("./explosion.wav", GL_FALSE);
 		}
 		for (int i = 0; i < fwp.trails_num; ++i) {
 			if (trails[i]->isDied()) // 不再渲染死亡的粒子团

@@ -19,6 +19,8 @@
 #include "firework.h"
 #include "skybox.h"
 
+#include <irrKlang/irrKlang.h>
+
 using namespace std;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -42,6 +44,9 @@ float lastFrame = 0.0f;
 
 // lighting
 glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+
+// sound
+irrklang::ISoundEngine* SoundEngine = irrklang::createIrrKlangDevice();
 
 int main()
 {
@@ -206,6 +211,10 @@ int main()
     skyShader.use();
     skyShader.setInt("skybox", 0);
 
+    // ÒôÆµ
+    SoundEngine->play2D("./rise.wav", GL_FALSE);
+    SoundEngine->play2D("./explosion.wav", GL_FALSE);
+    SoundEngine->stopAllSounds();
 
     // render loop
     // -----------

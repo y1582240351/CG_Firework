@@ -32,4 +32,3 @@ add_executable(${NAME} ${SOURCE})
 target_link_libraries(${NAME} ${LIBS})
 
 include_directories(${CMAKE_SOURCE_DIR}/includes)
-

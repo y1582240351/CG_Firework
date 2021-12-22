@@ -19,6 +19,8 @@
 #include "particle_system.h"
 #include "utility_tool.h"
 
+#include <irrKlang/irrKlang.h>
+
 typedef std::shared_ptr<ParticleSystem> ptr;
 
 

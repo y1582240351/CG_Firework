@@ -51,6 +51,7 @@ ParticleSystem::ParticleSystem(int max_particle = MAX_PARTICLE_NUM) : max_partic
 	glEnableVertexAttribArray(COLOR);
 
 	++system_cnt;
+	/*particles.resize(MAX_PARTICLE_NUM);*/
 }
 
 
@@ -113,17 +114,25 @@ void ParticleSystem::draw(Shader& shader) {
 /// </summary>
 /// <param name="base_particle">初始化所用的标准参照粒子</param>
 void ParticleSystem::initTrail(Particle& base_particle) {
+	particles.resize(MAX_PARTICLE_NUM);
 	particles[0] = base_particle;
 	float size_atten = 0.01f;
 	for (int i = 1; i < max_particles_num; ++i) {
 		particles[i].position = base_particle.position;
 		particles[i].velocity = glm::fvec3(0.0f, 0.0f, 0.0f);
-		particles[i].life = floatRandom(1.0f, base_particle.life);
+		particles[i].life = floatRandom(10.0f, base_particle.life);
 		particles[i].color = base_particle.color;
 		particles[i].size = (1.0f - size_atten) * base_particle.size;
 	}
 }
 
+void ParticleSystem::initTrailGen(Particle& base_particle, GenParam& param) {
+	particles.push_back(base_particle);
+	gen_param = param;
+	pos = particles[0].position;
+	vel = particles[0].velocity;
+	count = 0;
+}
 
 /// <summary>
 /// 让粒子按一定的轨迹运动
@@ -131,11 +140,11 @@ void ParticleSystem::initTrail(Particle& base_particle) {
 /// <param name="delta_time">时间间隔</param>
 /// <returns>当前存活粒子的个数</returns>
 int ParticleSystem::trail(float delta_time) {
-	static bool showed[MAX_PARTICLE_NUM] = { 0 };
+	//static bool showed[MAX_PARTICLE_NUM] = { 0 };
 	particles_num = 0;
-	glm::fvec3 a(0.0f, -0.01f, 0.0f); // 加速度
+	glm::fvec3 a(0.0f, -0.02f, 0.0f); // 加速度
 	float size_atten;
-	bool tmp = false;
+	//bool tmp = false;
 
 	glm::fvec3 pre_pos;
 
@@ -148,12 +157,19 @@ int ParticleSystem::trail(float delta_time) {
 				particles[i].velocity = velocityUpdate(particles[i].velocity, a, delta_time);
 				/*particles[i].size *= 0.999f;*/
 			}
-			else if (!showed[i] && !tmp) {
-				//glm::fvec3 tmp = particles[i].position;
+			//else if (!showed[i] && !tmp) {
+			//	//glm::fvec3 tmp = particles[i].position;
+			//	particles[i].position = pre_pos;
+			//	//pre_pos = tmp;
+			//	showed[i] = true;
+			//	tmp = true;
+			//}
+			else {
+				glm::fvec3 tmp = particles[i].position;
 				particles[i].position = pre_pos;
-				//pre_pos = tmp;
-				showed[i] = true;
-				tmp = true;
+				pre_pos = tmp;
+				/*showed[i] = true;
+				tmp = true;*/
 			}
 
 			/*size_atten = floatRandom(0.001 * static_cast<float>(i), 0.01 * static_cast<float>(i));
@@ -180,7 +196,43 @@ int ParticleSystem::trail(float delta_time) {
 			particles_num++;
 		}
 		else {
-			showed[i] = false;
+			//showed[i] = false;
+		}
+	}
+	updatePos(pos_size_data);
+	updateColor(color_data);
+	return particles_num;
+}
+
+
+int ParticleSystem::trailGen(float delta_time) {
+	glm::fvec3 a(0.0f, -0.02f, 0.0f); // 加速度
+	genParticles(delta_time);
+	particles_num = 0;
+	for (int i = 0; i < particles.size(); ++i) {
+		if (particles[i].life > 0.0f) {
+
+			particles[i].position = move(particles[i].position, particles[i].velocity, a, delta_time);
+			particles[i].velocity = velocityUpdate(particles[i].velocity, a, delta_time);
+
+			particles[i].life -= delta_time;
+
+			pos_size_data[4 * particles_num + 0] = particles[i].position.x;
+			pos_size_data[4 * particles_num + 1] = particles[i].position.y;
+			pos_size_data[4 * particles_num + 2] = particles[i].position.z;
+			pos_size_data[4 * particles_num + 3] = particles[i].size;
+
+			color_data[4 * particles_num + 0] = particles[i].color.r;
+			color_data[4 * particles_num + 1] = particles[i].color.g;
+			color_data[4 * particles_num + 2] = particles[i].color.b;
+			color_data[4 * particles_num + 3] = particles[i].color.a;
+
+			particles_num++;
+		}
+		else {
+			particles[i] = particles[particles.size() - 1];
+			particles.pop_back();
+			--i;
 		}
 	}
 	updatePos(pos_size_data);
@@ -195,6 +247,7 @@ int ParticleSystem::trail(float delta_time) {
 /// <param name="base_particle">每个粒子的基本属性，注意这里的速度并没有使用</param>
 /// <param name="v_abs">要指定的速度大小</param>
 void ParticleSystem::initExplode(Particle& base_particle, float v_abs) {
+	particles.resize(MAX_PARTICLE_NUM);
 	for (int i = 0; i < max_particles_num; ++i) {
 		particles[i] = base_particle;
 		particles[i].velocity = v_abs * sphereRandom();
@@ -209,7 +262,7 @@ void ParticleSystem::initExplode(Particle& base_particle, float v_abs) {
 /// <returns>存活粒子的个数</returns>
 int ParticleSystem::explode(float delta_time) {
 	particles_num = 0;
-	glm::fvec3 a(0.0f, -0.0f, 0.0f); // 加速度
+	glm::fvec3 a(0.0f, 0.00f, 0.0f); // 加速度
 	float size_atten;
 
 	glm::fvec3 pre_pos;
@@ -300,4 +353,34 @@ void ParticleSystem::setTexture(const char* file_name) {
 /// </summary>
 void ParticleSystem::deleteTexture() {
 	glDeleteTextures(1, &texture);
+}
+
+
+/// <summary>
+/// 生成粒子
+/// </summary>
+void ParticleSystem::genParticles(float delta_time) {
+	++count;
+	if (count % gen_param.delay != 0) {
+		return;
+	}
+	int n = delta_time * gen_param.gen_rate; // 设置生成粒子的个数
+	for (int i = 0; i < n; ++i) {
+		if (particles.size() >= max_particles_num)
+			break;
+		Particle p;
+		float r = particles[0].size * gen_param.size_rate;
+		p.color = particles[0].color;
+		//p.velocity = particles[0].velocity * floatRandom(0.85, 0.90);
+		// p.velocity = particles[0].velocity - glm::fvec3(0.0f, r / delta_time, 0.0f) * floatRandom(0.085, 0.090);
+		float tmp = normalRandom();
+		p.velocity = vel * gen_param.vel_base_rate * tmp + vel * gen_param.vel_random_rate * sphereRandom();
+		p.position = posRandom(pos, r); // (0.01f * delta_time * particles[0].velocity).length()
+		p.life = particles[0].life * floatRandom(gen_param.life_rate[1], gen_param.life_rate[1]);
+		//p.life = particles[0].life * tmp;
+		p.size = gen_param.size;
+		particles.push_back(p);
+	}
+	pos = particles[0].position;
+	vel = particles[0].velocity;
 }

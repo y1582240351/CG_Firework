@@ -69,4 +69,20 @@ float timer();
 /// <returns>随机方向的单位向量</returns>
 glm::fvec3 sphereRandom();
 
+
+/// <summary>
+/// 在以origin_pos为球心，radius为半径进行随机采样
+/// </summary>
+/// <param name="origin_pos"></param>
+/// <param name="radius"></param>
+/// <returns></returns>
+glm::fvec3 posRandom(glm::fvec3& origin_pos, float radius);
+
+
+/// <summary>
+/// 返回服从高斯分布的随机数 (0.5,1)
+/// </summary>
+/// <returns></returns>
+float normalRandom();
+
 #endif

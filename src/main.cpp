@@ -166,7 +166,7 @@ int main()
     //glEnableVertexAttribArray(0);
 
     glEnable(GL_PROGRAM_POINT_SIZE);
-    Shader particleShader("particle_test_vs.glsl", "particle_test_texture_fs.glsl");
+    Shader particleShader("particle_test_vs.glsl", "particle_test_fs.glsl");
     Shader skyShader("skybox_test_vs.glsl", "skybox_text_fs.glsl");
     // 测试粒子系统
     /*ParticleSystem ps(10000);*/
@@ -183,7 +183,7 @@ int main()
     // 测试烟花
     Firework fw(4.0f);
     fireworkParam fp;
-    fp.trails_num = 100;
+    fp.trails_num = 60;
     fp.explode_num = 0;
     fp.tp.max_trail = 60;
     fp.tp.min_trail = 40;

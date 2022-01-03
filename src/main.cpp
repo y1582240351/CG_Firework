@@ -18,6 +18,7 @@
 #include "utility_tool.h"
 #include "firework.h"
 #include "skybox.h"
+#include "model.h"
 
 #include <irrKlang/irrKlang.h>
 
@@ -219,6 +220,9 @@ int main()
     SoundEngine->play2D("./rise.wav", GL_FALSE);
     SoundEngine->play2D("./explosion.wav", GL_FALSE);
     SoundEngine->stopAllSounds();
+
+    // Ä£ÐÍ
+    
 
     // render loop
     // -----------

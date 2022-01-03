@@ -53,7 +53,7 @@ void Firework::init(fireworkParam base_fwp) {
 void Firework::light(Shader& shader, float delta_time) {
 	time_cnt += delta_time;
 	if (time_cnt < explode_time) {
-		trails[0]->trailGen(delta_time);
+		trails[0]->trailGen(delta_time,0.85,0.06);
 		trails[0]->draw(shader);
 		if (!sound) {
 			SoundEngine->play2D("./rise.wav", GL_FALSE);

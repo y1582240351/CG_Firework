@@ -70,8 +70,4 @@ glm::fvec3 ColorRandom()
 	return glm::fvec3(intRandom(0, 255) * 1.0f / 255,
 		intRandom(0, 255) * 1.0f / 255,
 		intRandom(0, 255) * 1.0f / 255);
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 9a62f39ad558c26963c51de33a9e7ad3d10adf8b

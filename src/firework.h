@@ -55,6 +55,7 @@ private:
 	float time_cnt, explode_time; // 计时器以及要爆炸的时间
 	fireworkParam fwp; // 烟花的参数
 	bool exploded;
+	bool sound;
 };
 
 

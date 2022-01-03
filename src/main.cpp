@@ -1,5 +1,10 @@
 #define STB_IMAGE_IMPLEMENTATION
 
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
+
+
 #include <stdlib.h>
 #include <iostream>
 #include <filesystem>
@@ -48,6 +53,9 @@ glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 // sound
 irrklang::ISoundEngine* SoundEngine = irrklang::createIrrKlangDevice();
 
+// mouse
+bool open_gui = true;
+
 int main()
 {
     cout << _pgmptr << endl;
@@ -76,7 +84,7 @@ int main()
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
 
-    // tell GLFW to capture our mouse
+    //tell GLFW to capture our mouse
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     // glad: load all OpenGL function pointers
@@ -91,83 +99,12 @@ int main()
     // -----------------------------
     glEnable(GL_DEPTH_TEST);
 
-    // build and compile our shader zprogram
-    // ------------------------------------
-    //Shader lightingShader("1.colors.vs", "1.colors.fs");
-    //Shader lightCubeShader("1.light_cube.vs", "1.light_cube.fs");
-    // set up vertex data (and buffer(s)) and configure vertex attributes
-    // ------------------------------------------------------------------
-    //float vertices[] = {
-    //    -0.5f, -0.5f, -0.5f,
-    //     0.5f, -0.5f, -0.5f,
-    //     0.5f,  0.5f, -0.5f,
-    //     0.5f,  0.5f, -0.5f,
-    //    -0.5f,  0.5f, -0.5f,
-    //    -0.5f, -0.5f, -0.5f,
-
-    //    -0.5f, -0.5f,  0.5f,
-    //     0.5f, -0.5f,  0.5f,
-    //     0.5f,  0.5f,  0.5f,
-    //     0.5f,  0.5f,  0.5f,
-    //    -0.5f,  0.5f,  0.5f,
-    //    -0.5f, -0.5f,  0.5f,
-
-    //    -0.5f,  0.5f,  0.5f,
-    //    -0.5f,  0.5f, -0.5f,
-    //    -0.5f, -0.5f, -0.5f,
-    //    -0.5f, -0.5f, -0.5f,
-    //    -0.5f, -0.5f,  0.5f,
-    //    -0.5f,  0.5f,  0.5f,
-
-    //     0.5f,  0.5f,  0.5f,
-    //     0.5f,  0.5f, -0.5f,
-    //     0.5f, -0.5f, -0.5f,
-    //     0.5f, -0.5f, -0.5f,
-    //     0.5f, -0.5f,  0.5f,
-    //     0.5f,  0.5f,  0.5f,
-
-    //    -0.5f, -0.5f, -0.5f,
-    //     0.5f, -0.5f, -0.5f,
-    //     0.5f, -0.5f,  0.5f,
-    //     0.5f, -0.5f,  0.5f,
-    //    -0.5f, -0.5f,  0.5f,
-    //    -0.5f, -0.5f, -0.5f,
-
-    //    -0.5f,  0.5f, -0.5f,
-    //     0.5f,  0.5f, -0.5f,
-    //     0.5f,  0.5f,  0.5f,
-    //     0.5f,  0.5f,  0.5f,
-    //    -0.5f,  0.5f,  0.5f,
-    //    -0.5f,  0.5f, -0.5f,
-    //};
-    //// first, configure the cube's VAO (and VBO)
-    //unsigned int VBO, cubeVAO;
-    //glGenVertexArrays(1, &cubeVAO);
-    //glGenBuffers(1, &VBO);
-
-    //glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    //glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    //glBindVertexArray(cubeVAO);
-
-    //// position attribute
-    //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    //glEnableVertexAttribArray(0);
-
-    //// second, configure the light's VAO (VBO stays the same; the vertices are the same for the light object which is also a 3D cube)
-    //unsigned int lightCubeVAO;
-    //glGenVertexArrays(1, &lightCubeVAO);
-    //glBindVertexArray(lightCubeVAO);
-
-    //// we only need to bind to the VBO (to link it with glVertexAttribPointer), no need to fill it; the VBO's data already contains all we need (it's already bound, but we do it again for educational purposes)
-    //glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-    //glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    //glEnableVertexAttribArray(0);
-
     glEnable(GL_PROGRAM_POINT_SIZE);
     Shader particleShader("particle_test_vs.glsl", "particle_test_fs.glsl");
     Shader skyShader("skybox_test_vs.glsl", "skybox_text_fs.glsl");
+    // Blinn_Phong Shader
+    Shader lightingShader("Blinn_Phong_vs.glsl", "Blinn_Phong_fs.glsl");
+
     // ≤‚ ‘¡£◊”œµÕ≥
     /*ParticleSystem ps(10000);*/
     //ParticleSystem* ps = new ParticleSystem(10);
@@ -181,35 +118,39 @@ int main()
     //ps->initTrail(p);
 
     // ≤‚ ‘—Ãª®
-    Firework fw(4.0f);
-    fireworkParam fp;
-    fp.trails_num = 60;
-    fp.explode_num = 0;
-    fp.tp.max_trail = 60;
-    fp.tp.min_trail = 40;
-    fw.init(fp);
+    float explode_time = 4.0f;
+    int new_fire = 0;
+    int current_fire = 0;
+    vector<Firework> fw;
+    int trails_num = 60, explode_num = 0, max_trail = 60, min_trail = 40;
+    //Firework fw(4.0f);
+    //fireworkParam fp;
+    //fp.trails_num = 60;
+    //fp.explode_num = 0;
+    //fp.tp.max_trail = 60;
+    //fp.tp.min_trail = 40;
+    //fw.init(fp);
 
     SkyBox sb;
-    /*std::vector<std::string> boxes{
-        std::string("DOOM16RT.png"),
-        std::string("DOOM16LF.png"),
-        std::string("DOOM16UP.png"),
-        std::string("DOOM16DN.png"),
-        std::string("DOOM16FT.png"),
-        std::string("DOOM16BK.png"),
-    };*/
     std::vector<std::string> boxes{
-        std::string("right.jpg"),
-        std::string("left.jpg"),
-        std::string("top.jpg"),
-        std::string("bottom.jpg"),
-        std::string("front.jpg"),
-        std::string("back.jpg"),
+        std::string("./skybox/right.jpg"),
+        std::string("./skybox/left.jpg"),
+        std::string("./skybox/top.jpg"),
+        std::string("./skybox/bottom.jpg"),
+        std::string("./skybox/front.jpg"),
+        std::string("./skybox/back.jpg"),
     };
     sb.loadMap(boxes);
 
     skyShader.use();
     skyShader.setInt("skybox", 0);
+
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    ImGui::StyleColorsDark();
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 330");
 
     // “Ù∆µ
     SoundEngine->play2D("./rise.wav", GL_FALSE);
@@ -220,15 +161,34 @@ int main()
     // -----------
     while (!glfwWindowShouldClose(window))
     {
-        // per-frame time logic
-        // --------------------
-        /*float currentFrame = glfwGetTime();
-        deltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;*/
-
         // input
         // -----
         processInput(window);
+
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        if (open_gui) {
+            ImGui::Begin("Fire Work GUI!",&open_gui);               // Create a window called "Hello, world!" and append into it
+            ImGui::Text("Parameters of fireworks");               // Display some text (you can use a format strings too)
+            if (ImGui::Button("Generate"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+                new_fire++;
+
+            ImGui::SliderFloat("explode_time", &explode_time, 2.0f, 6.0f);
+            ImGui::SliderInt("trails_num", &trails_num, 30,150);
+            ImGui::SliderInt("explode_num", &explode_num, 0,3);
+            ImGui::SliderInt("max_trail", &max_trail, 30,trails_num);
+            ImGui::SliderInt("min_trails", &min_trail, 30,trails_num);
+            
+            //ImGui::ColorEdit3("clear_color", (float*)&clear_color);
+            //ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+            ImGui::End();
+        } 
+
+        // tell GLFW to capture our mouse
+        if(open_gui) glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        else glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
         // render
         // ------
@@ -278,14 +238,26 @@ int main()
 
         //glBindVertexArray(lightCubeVAO);
         //glDrawArrays(GL_POINTS, 0, 36); 
-
+        
+        if (new_fire == current_fire) {
+            current_fire++;
+            // ≤‚ ‘—Ãª®
+            Firework new_fw(explode_time);
+            fireworkParam fp;
+            fp.trails_num = trails_num;
+            fp.explode_num = explode_num;
+            fp.tp.max_trail = max_trail;
+            fp.tp.min_trail = min_trail;
+            new_fw.init(fp);
+            fw.push_back(new_fw);
+        }
         float delta_time = timer();
         particleShader.use();
         ////ps->explode(delta_time);
         //ps->trail(delta_time);
         //ps->draw(particleShader);
 
-        fw.light(particleShader, delta_time);
+        fw[new_fire].light(particleShader, delta_time);
 
         skyShader.use();
         glm::mat4 view = glm::mat4(glm::mat3(camera.GetViewMatrix())); // remove translation from the view matrix
@@ -293,6 +265,9 @@ int main()
         skyShader.setMat4("view", view);
         skyShader.setMat4("projection", projection);
         sb.draw(skyShader);
+
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
@@ -307,6 +282,9 @@ int main()
     glDeleteVertexArrays(1, &lightCubeVAO);
     glDeleteBuffers(1, &VBO);*/
 
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
     glfwTerminate();

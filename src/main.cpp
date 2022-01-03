@@ -168,6 +168,10 @@ int main()
     glEnable(GL_PROGRAM_POINT_SIZE);
     Shader particleShader("particle_test_vs.glsl", "particle_test_fs.glsl");
     Shader skyShader("skybox_test_vs.glsl", "skybox_text_fs.glsl");
+
+    // Blinn_Phong Shader
+    Shader lightingShader("Blinn_Phong_vs.glsl", "Blinn_Phong_fs.glsl");
+
     // ≤‚ ‘¡£◊”œµÕ≥
     /*ParticleSystem ps(10000);*/
     //ParticleSystem* ps = new ParticleSystem(10);
@@ -199,12 +203,12 @@ int main()
         std::string("DOOM16BK.png"),
     };*/
     std::vector<std::string> boxes{
-        std::string("right.jpg"),
-        std::string("left.jpg"),
-        std::string("top.jpg"),
-        std::string("bottom.jpg"),
-        std::string("front.jpg"),
-        std::string("back.jpg"),
+        std::string("./right.jpg"),
+        std::string("./left.jpg"),
+        std::string("./top.jpg"),
+        std::string("./bottom.jpg"),
+        std::string("./front.jpg"),
+        std::string("./back.jpg"),
     };
     sb.loadMap(boxes);
 

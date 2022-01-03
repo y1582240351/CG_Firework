@@ -91,9 +91,4 @@ float normalRandom(float mu, float sigma);
 /// <returns></returns>
 glm::fvec3 ColorRandom();
 
-/// <summary>
-/// 返回服从高斯分布的随机数 (0.0, 1.0)
-/// </summary>
-/// <returns></returns>
-glm::fvec3 ColorRandom();
 #endif

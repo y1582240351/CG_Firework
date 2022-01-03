@@ -72,9 +72,9 @@ public:
     static void setTexture(const char* file_name);
     static void deleteTexture();
 
-    void genParticles(float dt);
+    void genParticles(float dt, float mu, float sigma);
 
-    int trailGen(float delta_time);
+    int trailGen(float delta_time, float mu, float sigma);
 
     void initTrailGen(Particle& base_particle, GenParam& param);
 

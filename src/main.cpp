@@ -23,6 +23,7 @@
 #include "utility_tool.h"
 #include "firework.h"
 #include "skybox.h"
+#include "model.h"
 
 #include <irrKlang/irrKlang.h>
 
@@ -102,6 +103,10 @@ int main()
     glEnable(GL_PROGRAM_POINT_SIZE);
     Shader particleShader("particle_test_vs.glsl", "particle_test_fs.glsl");
     Shader skyShader("skybox_test_vs.glsl", "skybox_text_fs.glsl");
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9a62f39ad558c26963c51de33a9e7ad3d10adf8b
     // Blinn_Phong Shader
     Shader lightingShader("Blinn_Phong_vs.glsl", "Blinn_Phong_fs.glsl");
 
@@ -156,6 +161,9 @@ int main()
     SoundEngine->play2D("./rise.wav", GL_FALSE);
     SoundEngine->play2D("./explosion.wav", GL_FALSE);
     SoundEngine->stopAllSounds();
+
+    // Ä£ÐÍ
+    // Model Manor("./Castle/Castle OBJ.obj");
 
     // render loop
     // -----------

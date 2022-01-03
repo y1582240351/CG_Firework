@@ -204,12 +204,12 @@ int main()
         std::string("DOOM16BK.png"),
     };*/
     std::vector<std::string> boxes{
-        std::string("./right.jpg"),
-        std::string("./left.jpg"),
-        std::string("./top.jpg"),
-        std::string("./bottom.jpg"),
-        std::string("./front.jpg"),
-        std::string("./back.jpg"),
+        std::string("./skybox/right.jpg"),
+        std::string("./skybox/left.jpg"),
+        std::string("./skybox/top.jpg"),
+        std::string("./skybox/bottom.jpg"),
+        std::string("./skybox/front.jpg"),
+        std::string("./skybox/back.jpg"),
     };
     sb.loadMap(boxes);
 
@@ -222,7 +222,7 @@ int main()
     SoundEngine->stopAllSounds();
 
     // Ä£ÐÍ
-    
+    // Model Manor("./Castle/Castle OBJ.obj");
 
     // render loop
     // -----------

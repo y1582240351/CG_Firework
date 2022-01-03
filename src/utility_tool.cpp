@@ -55,9 +55,9 @@ glm::fvec3 posRandom(glm::fvec3& origin_pos, float radius) {
 	return pos;
 }
 
-float normalRandom() {
+float normalRandom(float mu, float sigma) {
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
 	std::default_random_engine generator(seed);
-	std::normal_distribution<float> distribution(0.7, 0.07);
+	std::normal_distribution<float> distribution(mu, sigma);
 	return distribution(generator);
 }

@@ -23,6 +23,9 @@ glm::fvec3 fvec3Random(float min, float max) {
 	return glm::fvec3(r1, r2, r3);
 }
 
+int intRandom(int min, int max) {
+	return min + rand() / (RAND_MAX / (max - min));
+}
 
 float floatRandom(float min, float max) {
 	return min + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (max - min)));
@@ -60,4 +63,11 @@ float normalRandom(float mu, float sigma) {
 	std::default_random_engine generator(seed);
 	std::normal_distribution<float> distribution(mu, sigma);
 	return distribution(generator);
+}
+
+glm::fvec3 ColorRandom()
+{
+	return glm::fvec3(intRandom(0, 255) * 1.0f / 255,
+		intRandom(0, 255) * 1.0f / 255,
+		intRandom(0, 255) * 1.0f / 255);
 }

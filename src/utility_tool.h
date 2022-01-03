@@ -85,4 +85,10 @@ glm::fvec3 posRandom(glm::fvec3& origin_pos, float radius);
 /// <returns></returns>
 float normalRandom(float mu, float sigma);
 
+/// <summary>
+/// 返回服从高斯分布的随机数 (0.0, 1.0)
+/// </summary>
+/// <returns></returns>
+glm::fvec3 ColorRandom();
+
 #endif

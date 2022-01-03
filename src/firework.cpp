@@ -90,7 +90,7 @@ void Firework::genTrails() {
 		Particle base;
 		base.position = explode_pos;
 		//base.color = glm::fvec4(0.1f, 0.4f, 0.3f, 1.0f);
-		base.color = glm::fvec4(1.0f, 1.0f, 1.0f, 1.0f);
+		base.color = glm::fvec4(ColorRandom(), 1.0f);
 		base.velocity = 0.15f * sphereRandom();
 		base.size = 6.0f;
 		base.life = 5.0f;

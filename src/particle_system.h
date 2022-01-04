@@ -47,9 +47,17 @@ class ParticleSystem
 public:
     ParticleSystem() {};
 
-    ParticleSystem(int max_particle);
+    ParticleSystem(int max_particle, bool allow);
 
     ~ParticleSystem();
+
+    void youCanDie();
+
+    bool testLife(float estimatedAge);
+
+    bool haveAnotherChance();
+
+    void cancelAnotherChance();
 
     void initTrail(Particle& base_particle);
 
@@ -66,6 +74,8 @@ public:
     int explode(float delta_time);
 
     bool isDied();
+
+    glm::fvec3 getHeadParticlePos();
 
     glm::fvec3 posTrail();
 
@@ -99,6 +109,8 @@ private:
     int count;
     glm::fvec3 pos;
     glm::fvec3 vel;
+    bool canExplodeTwice;
+    bool imDied;
 };
 
 #endif

@@ -10,6 +10,7 @@ GLuint ParticleSystem::texture = -1;
 
 
 ParticleSystem::~ParticleSystem() {
+	imDied = true;
 	glDeleteBuffers(3, vbo);
 	glDeleteVertexArrays(1, &vao);
 
@@ -19,11 +20,26 @@ ParticleSystem::~ParticleSystem() {
 	}
 }
 
+void ParticleSystem::youCanDie() 
+{
+	imDied = true;
+	glDeleteBuffers(3, vbo);
+	glDeleteVertexArrays(1, &vao);
+}
+
+
+bool ParticleSystem::testLife(float estimatedAge)
+{
+	return particles[0].life <= estimatedAge;
+}
+
+
+
 /// <summary>
 /// 粒子系统构造函数
 /// </summary>
 /// <param name="max_particle"> 最大的粒子数 </param>
-ParticleSystem::ParticleSystem(int max_particle = MAX_PARTICLE_NUM) : max_particles_num(max_particle) {
+ParticleSystem::ParticleSystem(int max_particle = MAX_PARTICLE_NUM, bool allow = true) : max_particles_num(max_particle), canExplodeTwice(allow) {
 	glGenBuffers(3, vbo);
 	glGenVertexArrays(1, &vao);
 
@@ -54,6 +70,19 @@ ParticleSystem::ParticleSystem(int max_particle = MAX_PARTICLE_NUM) : max_partic
 	/*particles.resize(MAX_PARTICLE_NUM);*/
 }
 
+
+
+
+
+bool ParticleSystem::haveAnotherChance()
+{
+	return canExplodeTwice;
+}
+
+void ParticleSystem::cancelAnotherChance()
+{
+	canExplodeTwice = false;
+}
 
 /// <summary>
 /// 更新粒子的颜色参数
@@ -308,6 +337,11 @@ bool ParticleSystem::isDied() {
 	return particles[0].life <= 0.0f;
 }
 
+
+glm::fvec3 ParticleSystem::getHeadParticlePos()
+{
+	return particles[0].position;
+}
 
 
 /// <summary>

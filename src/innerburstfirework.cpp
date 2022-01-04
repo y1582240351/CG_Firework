@@ -1,22 +1,23 @@
-#include "firework.h"
+#include "innerburstfirework.h"
 
 // sound
 extern irrklang::ISoundEngine* SoundEngine;
 
-Firework::Firework() : time_cnt(0.0f), exploded(false) {
+innerburstfirework::innerburstfirework() : time_cnt(0.0f), explodedOnce(false), explodedTwice(false){
 
 }
 
-Firework::~Firework() {
+innerburstfirework::~innerburstfirework() {
 
 	std::cout << "revoke" << std::endl;
 
 }
 
-Firework::Firework(float explode_time) : time_cnt(0.0f), explode_time(explode_time), exploded(false){
-	ptr p = std::make_shared<ParticleSystem>(10000, true);
+innerburstfirework::innerburstfirework(float explode_time) : time_cnt(0.0f), explode_time(explode_time), explodedOnce(false),  explodedTwice(false) {
+	//1
+	ptr p = std::make_shared<ParticleSystem>(5000, true);
 	Particle base;
-	base.position = glm::fvec3(0.0f, -1.0f, 0.0f);
+	base.position = glm::fvec3(0.0f, -1.5f, -1.0f);
 	base.color = glm::fvec4(1.0f, 1.0f, 1.0f, 1.0f);
 	base.velocity = glm::fvec3(0.0f, 0.450f, 0.0f);
 	base.size = 10.0f;
@@ -40,18 +41,18 @@ Firework::Firework(float explode_time) : time_cnt(0.0f), explode_time(explode_ti
 /// 初始化烟花数据
 /// </summary>
 /// <param name="base_fwp">烟花初始数据</param>
-void Firework::init(fireworkParam base_fwp) {
+void innerburstfirework::init(fireworkParam base_fwp) {
 	fwp = base_fwp;
 	// ...其他要用到的参数
 }
 
 
-void Firework::destroy()
+void innerburstfirework::destroy()
 {
 	trails.clear();
 }
 
-bool Firework::isAlive()
+bool innerburstfirework::isAlive()
 {
 	bool flag = 0;
 	for (int i = 0; i < trails.size(); ++i)
@@ -70,7 +71,7 @@ bool Firework::isAlive()
 /// </summary>
 /// <param name="shader">渲染所用的着色器</param>
 /// <param name="delta_time">每帧之间的间隔时间</param>
-void Firework::light(Shader& shader, float delta_time) {
+void innerburstfirework::light(Shader& shader, float delta_time) {
 
 	time_cnt += delta_time;
 	if (time_cnt < explode_time) {
@@ -81,50 +82,49 @@ void Firework::light(Shader& shader, float delta_time) {
 			SoundEngine->play2D("./rise.wav", GL_FALSE);
 			sound = true;
 		}
-		
+
 	}
 	else {
-		if (!exploded) { // 烟花第一次爆炸
-			exploded = true;
+		if (!explodedOnce) { // 烟花第一次爆炸
+
+			explodedOnce = true;
+			explodePosition = trails[0]->getHeadParticlePos();
 			genTrails();
 			SoundEngine->play2D("./explosion.wav", GL_FALSE);
 		}
 		//fwp.trails_num
 		for (int i = 0; i < trails.size(); ++i) {
+
+			if (trails[1]->testLife(5.0f) == true && !explodedTwice)
+			{
+				std::cout << "gen" << std::endl;
+				explodedTwice = true;
+				for (int j = 0; j < 500; ++j) {
+					ptr p = std::make_shared<ParticleSystem>(10000, false);
+					// 初始化生成的节点，参数可以改
+					Particle base;
+					base.position = explodePosition;
+					//base.color = glm::fvec4(0.1f, 0.4f, 0.3f, 1.0f);
+					base.color = glm::fvec4(0.98f, 0.98f, 0.82f, 1.0f);
+					base.velocity = 0.15f * sphereRandom();
+					base.size = 1.0f;
+					base.life = 2.0f;
+					GenParam param;
+					param.gen_rate = 150;
+					param.size = 1;
+					param.size_rate = 0.001;
+					param.vel_base_rate = 1.0;
+					param.vel_random_rate = 0.0000;
+					param.delay = 1;
+					param.life_rate[0] = 0.6;
+					param.life_rate[1] = 0.7;
+					p->initTrailGen(base, param);
+					trails.push_back(p);
+				}
+			}
 			if (trails[i]->isDied()) // 不再渲染死亡的粒子团
 			{
-				if (trails[i]->haveAnotherChance() == true)
-				{
-					trails[i]->cancelAnotherChance();
-
-					auto chance = floatRandom(0.0f, 1.0f);
-
-					if (chance > 0.9)
-					{
-						for (int j = 0; j < 300; ++j) {
-							ptr p = std::make_shared<ParticleSystem>(50, false);
-							// 初始化生成的节点，参数可以改
-							Particle base;
-							base.position = trails[i]->getHeadParticlePos();
-							//base.color = glm::fvec4(0.1f, 0.4f, 0.3f, 1.0f);
-							base.color = glm::fvec4(ColorRandom(), 1.0f);
-							base.velocity = 0.15f * sphereRandom();
-							base.size = 2.0f;
-							base.life = floatRandom(0.0, 2.0);
-							GenParam param;
-							param.gen_rate = 0;
-							param.size = 1;
-							param.size_rate = 0.001;
-							param.vel_base_rate = 1.0;
-							param.vel_random_rate = 0.0000;
-							param.delay = 1;
-							param.life_rate[0] = 0.6;
-							param.life_rate[1] = 0.7;
-							p->initTrailGen(base, param);
-							trails.push_back(p);
-						}
-					}
-				}
+				continue;
 			}
 			trails[i]->trailGen(delta_time, 0.7, 0.07);
 			trails[i]->draw(shader);
@@ -136,11 +136,11 @@ void Firework::light(Shader& shader, float delta_time) {
 /// <summary>
 /// 生成烟花炸开时产生的流苏
 /// </summary>
-void Firework::genTrails() {
+void innerburstfirework::genTrails() {
 	glm::fvec3 explode_pos = trails[0]->posTrail();
-	trails.resize(fwp.trails_num);
+	trails.resize(fwp.trails_num+1);
 	//ParticleSystem::setTexture("texture_img/light_PNG14431.png");
-	for (int i = 0; i < fwp.trails_num; ++i) {
+	for (int i = 1; i <= fwp.trails_num; ++i) {
 		ptr p = std::make_shared<ParticleSystem>(10000, true);
 		// 初始化生成的节点，参数可以改
 		Particle base;
@@ -149,7 +149,7 @@ void Firework::genTrails() {
 		base.color = glm::fvec4(ColorRandom(), 1.0f);
 		base.velocity = 0.15f * sphereRandom();
 		base.size = 3.0f;
-		base.life = floatRandom(0.0, 6.0);
+		base.life = 6.0;
 		GenParam param;
 		param.gen_rate = 150;
 		param.size = 1;

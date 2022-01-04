@@ -1,10 +1,5 @@
 #define STB_IMAGE_IMPLEMENTATION
 
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
-
-
 #include <stdlib.h>
 #include <iostream>
 #include <filesystem>
@@ -22,6 +17,9 @@
 #include "particle_system.h"
 #include "utility_tool.h"
 #include "firework.h"
+#include "bigfirework.h"
+#include "groudfirework.h"
+#include "innerburstfirework.h"
 #include "skybox.h"
 #include "model.h"
 
@@ -37,7 +35,8 @@ void processInput(GLFWwindow* window);
 // settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
-
+const unsigned int FIREWORK_TYPES = 3;
+const unsigned int FIREWORK_LIMITATIONS = 50;
 // camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 float lastX = SCR_WIDTH / 2.0f;
@@ -54,8 +53,12 @@ glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 // sound
 irrklang::ISoundEngine* SoundEngine = irrklang::createIrrKlangDevice();
 
-// mouse
-bool open_gui = true;
+//KEY BOARD STATUS
+bool PRESS[FIREWORK_TYPES] = { 0 };
+
+//fireworks
+std::vector<std::pair<Firework*, bool>>fireworks;
+
 
 int main()
 {
@@ -85,7 +88,7 @@ int main()
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
 
-    //tell GLFW to capture our mouse
+    // tell GLFW to capture our mouse
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     // glad: load all OpenGL function pointers
@@ -96,9 +99,8 @@ int main()
         return -1;
     }
 
-    // configure global opengl state
-    // -----------------------------
     glEnable(GL_DEPTH_TEST);
+
 
     glEnable(GL_PROGRAM_POINT_SIZE);
     Shader particleShader("particle_test_vs.glsl", "particle_test_fs.glsl");
@@ -107,33 +109,8 @@ int main()
     // Blinn_Phong Shader
     Shader lightingShader("Blinn_Phong_vs.glsl", "Blinn_Phong_fs.glsl");
 
-    // 测试粒子系统
-    /*ParticleSystem ps(10000);*/
-    //ParticleSystem* ps = new ParticleSystem(10);
-    //Particle p;
-    //p.position = glm::fvec3(0.0f, 0.0f, 0.0f);
-    //p.color = glm::fvec4(0.1f, 0.4f, 0.3f, 1.0f);
-    //p.velocity = glm::fvec3(0.0f, 0.0100f, 0.0f);
-    //p.life = 200.0f;
-    //p.size = 5.0f;
-    ////ps->initExplode(p, 0.1);
-    //ps->initTrail(p);
-
-    // 测试烟花
-    float explode_time = 4.0f;
-    int new_fire = 0;
-    int current_fire = 0;
-    vector<Firework> fw;
-    int trails_num = 60, explode_num = 0, max_trail = 60, min_trail = 40;
-    //Firework fw(4.0f);
-    //fireworkParam fp;
-    //fp.trails_num = 60;
-    //fp.explode_num = 0;
-    //fp.tp.max_trail = 60;
-    //fp.tp.min_trail = 40;
-    //fw.init(fp);
-
     SkyBox sb;
+
     std::vector<std::string> boxes{
         std::string("./skybox/right.jpg"),
         std::string("./skybox/left.jpg"),
@@ -147,20 +124,44 @@ int main()
     skyShader.use();
     skyShader.setInt("skybox", 0);
 
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    ImGui::StyleColorsDark();
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init("#version 330");
-
     // 音频
     SoundEngine->play2D("./rise.wav", GL_FALSE);
     SoundEngine->play2D("./explosion.wav", GL_FALSE);
     SoundEngine->stopAllSounds();
 
+    
+
+
     // 模型
     // Model Manor("./Castle/Castle OBJ.obj");
+
+
+    bigfirework fw(4.0f);
+    fireworkParam fp;
+    fp.trails_num = 300;
+    fp.explode_num = 0;
+    fp.tp.max_trail = 60;
+    fp.tp.min_trail = 40;
+    fw.init(fp);
+
+    /*innerburstfirework fw(4.0f);
+    fireworkParam fp;
+    fp.trails_num = 300;
+    fp.explode_num = 0;
+    fp.tp.max_trail = 60;
+    fp.tp.min_trail = 40;
+    fw.init(fp);*/
+
+    /*groundfirework fw(4.0f);
+    fireworkParam fp;
+    fp.trails_num = 300;
+    fp.explode_num = 0;
+    fp.tp.max_trail = 60;
+    fp.tp.min_trail = 40;
+    fw.init(fp);*/
+
+    fireworks.push_back(make_pair(&fw, true));
+
 
     // render loop
     // -----------
@@ -170,109 +171,41 @@ int main()
         // -----
         processInput(window);
 
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-
-        if (open_gui) {
-            ImGui::Begin("Fire Work GUI!",&open_gui);               // Create a window called "Hello, world!" and append into it
-            ImGui::Text("Parameters of fireworks");               // Display some text (you can use a format strings too)
-            if (ImGui::Button("Generate"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-                new_fire++;
-
-            ImGui::SliderFloat("explode_time", &explode_time, 2.0f, 6.0f);
-            ImGui::SliderInt("trails_num", &trails_num, 30,150);
-            ImGui::SliderInt("explode_num", &explode_num, 0,3);
-            ImGui::SliderInt("max_trail", &max_trail, 30,trails_num);
-            ImGui::SliderInt("min_trails", &min_trail, 30,trails_num);
-            
-            //ImGui::ColorEdit3("clear_color", (float*)&clear_color);
-            //ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-            ImGui::End();
-        } 
-
-        // tell GLFW to capture our mouse
-        if(open_gui) glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-        else glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
         // render
         // ------
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        //// be sure to activate shader when setting uniforms/drawing objects
-        //lightingShader.use();
-        //lightingShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
-        //lightingShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
-
-        //// view/projection transformations
-        //glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-        //glm::mat4 view = camera.GetViewMatrix();
-        //lightingShader.setMat4("projection", projection);
-        //lightingShader.setMat4("view", view);
-
-        //// world transformation
-        //glm::mat4 model = glm::mat4(1.0f);
-        //lightingShader.setMat4("model", model);
-
-        //// render the cube
-        //glBindVertexArray(cubeVAO);
-        //glDrawArrays(GL_TRIANGLES, 0, 36);
-
-
-        //// also draw the lamp object
-        //lightCubeShader.use();
-        //lightCubeShader.setMat4("projection", projection);
-        //lightCubeShader.setMat4("view", view);
-        //model = glm::mat4(1.0f);
-        //model = glm::translate(model, lightPos);
-        //model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
-        //lightCubeShader.setMat4("model", model);
-
-        //glBindVertexArray(lightCubeVAO);
-        //glDrawArrays(GL_POINTS, 0, 36);
-
-
-        //lightCubeShader.use();
-        //lightCubeShader.setMat4("projection", projection);
-        //lightCubeShader.setMat4("view", view);
-        //model = glm::mat4(1.0f);
-        //model = glm::translate(model, lightPos);
-        //model = glm::scale(model, glm::vec3(0.2f)); // a smaller cube
-        //lightCubeShader.setMat4("model", model);
-
-        //glBindVertexArray(lightCubeVAO);
-        //glDrawArrays(GL_POINTS, 0, 36); 
-        
-        if (new_fire == current_fire) {
-            current_fire++;
-            // 测试烟花
-            Firework new_fw(explode_time);
-            fireworkParam fp;
-            fp.trails_num = trails_num;
-            fp.explode_num = explode_num;
-            fp.tp.max_trail = max_trail;
-            fp.tp.min_trail = min_trail;
-            new_fw.init(fp);
-            fw.push_back(new_fw);
-        }
         float delta_time = timer();
-        particleShader.use();
-        ////ps->explode(delta_time);
-        //ps->trail(delta_time);
-        //ps->draw(particleShader);
 
-        fw[new_fire].light(particleShader, delta_time);
-
-        skyShader.use();
         glm::mat4 view = glm::mat4(glm::mat3(camera.GetViewMatrix())); // remove translation from the view matrix
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+
+        particleShader.use();
+        particleShader.setMat4("view", view);
+        particleShader.setMat4("projection", projection);
+        
+        for (int i = 0; i < fireworks.size(); i++)
+        {
+            if (fireworks[i].second == true)
+            {
+                if (fireworks[i].first->isAlive() == true)
+                {
+                    fireworks[i].first->light(particleShader, delta_time);
+                }
+                else
+                {
+                    fireworks[i].first->destroy();
+                    fireworks[i].second = false;
+                }
+            }
+        }
+
+        skyShader.use();
+        
         skyShader.setMat4("view", view);
         skyShader.setMat4("projection", projection);
         sb.draw(skyShader);
-
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
@@ -281,17 +214,7 @@ int main()
     }
     //delete ps;
 
-    // optional: de-allocate all resources once they've outlived their purpose:
-    // ------------------------------------------------------------------------
-    /*glDeleteVertexArrays(1, &cubeVAO);
-    glDeleteVertexArrays(1, &lightCubeVAO);
-    glDeleteBuffers(1, &VBO);*/
-
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
-    // glfw: terminate, clearing all previously allocated GLFW resources.
-    // ------------------------------------------------------------------
+   
     glfwTerminate();
     return 0;
 }
@@ -302,6 +225,23 @@ void processInput(GLFWwindow* window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
+
+
+    for (int i = 0; i < FIREWORK_TYPES; i++)
+    {
+        if (glfwGetKey(window, GLFW_KEY_1 + i) == GLFW_PRESS)
+        {
+            // 只有按键按下瞬间会发射烟花(松开->按下)
+            if (!PRESS[i] && fireworks.size() < FIREWORK_LIMITATIONS)
+            {
+                
+            }
+            PRESS[i] = true;
+        }
+        if (glfwGetKey(window, GLFW_KEY_1 + i) == GLFW_RELEASE)
+            PRESS[i] = false;
+    }
+
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         camera.ProcessKeyboard(FORWARD, deltaTime);

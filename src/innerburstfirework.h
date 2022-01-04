@@ -20,7 +20,7 @@ public:
 
 	void init(fireworkParam fwp);
 
-	void light(Shader& shder, float delta_time);
+	void light(Shader& shder, float delta_time, int second_trails_num);
 
 private:
 	std::vector<ptr> trails;	// 产生拖尾的粒子团，第0个是释放时的主粒子

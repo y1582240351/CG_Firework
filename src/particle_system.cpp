@@ -205,9 +205,9 @@ int ParticleSystem::trail(float delta_time) {
 }
 
 
-int ParticleSystem::trailGen(float delta_time) {
+int ParticleSystem::trailGen(float delta_time, float mu, float sigma) {
 	glm::fvec3 a(0.0f, -0.02f, 0.0f); // 加速度
-	genParticles(delta_time);
+	genParticles(delta_time, mu, sigma);
 	particles_num = 0;
 	for (int i = 0; i < particles.size(); ++i) {
 		if (particles[i].life > 0.0f) {
@@ -359,7 +359,7 @@ void ParticleSystem::deleteTexture() {
 /// <summary>
 /// 生成粒子
 /// </summary>
-void ParticleSystem::genParticles(float delta_time) {
+void ParticleSystem::genParticles(float delta_time, float mu, float sigma) {
 	++count;
 	if (count % gen_param.delay != 0) {
 		return;
@@ -373,7 +373,7 @@ void ParticleSystem::genParticles(float delta_time) {
 		p.color = particles[0].color;
 		//p.velocity = particles[0].velocity * floatRandom(0.85, 0.90);
 		// p.velocity = particles[0].velocity - glm::fvec3(0.0f, r / delta_time, 0.0f) * floatRandom(0.085, 0.090);
-		float tmp = normalRandom();
+		float tmp = normalRandom(mu, sigma);
 		p.velocity = vel * gen_param.vel_base_rate * tmp + vel * gen_param.vel_random_rate * sphereRandom();
 		p.position = posRandom(pos, r); // (0.01f * delta_time * particles[0].velocity).length()
 		p.life = particles[0].life * floatRandom(gen_param.life_rate[1], gen_param.life_rate[1]);

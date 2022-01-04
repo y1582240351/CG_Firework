@@ -53,7 +53,7 @@ void Firework::light(Shader& shader, float delta_time) {
 	time_cnt += delta_time;
 	if (time_cnt < explode_time) {
 		static bool sound = false;
-		trails[0]->trailGen(delta_time);
+		trails[0]->trailGen(delta_time, 0.85, 0.06);
 		trails[0]->draw(shader);
 		if (!sound) {
 			SoundEngine->play2D("./rise.wav", GL_FALSE);
@@ -70,7 +70,7 @@ void Firework::light(Shader& shader, float delta_time) {
 		for (int i = 0; i < fwp.trails_num; ++i) {
 			if (trails[i]->isDied()) // 不再渲染死亡的粒子团
 				continue;
-			trails[i]->trailGen(delta_time);
+			trails[i]->trailGen(delta_time, 0.7, 0.07);
 			trails[i]->draw(shader);
 		}
 	}
@@ -90,7 +90,7 @@ void Firework::genTrails() {
 		Particle base;
 		base.position = explode_pos;
 		//base.color = glm::fvec4(0.1f, 0.4f, 0.3f, 1.0f);
-		base.color = glm::fvec4(1.0f, 1.0f, 1.0f, 1.0f);
+		base.color = glm::fvec4(ColorRandom(), 1.0f);
 		base.velocity = 0.15f * sphereRandom();
 		base.size = 6.0f;
 		base.life = 5.0f;

@@ -18,6 +18,7 @@
 #include "utility_tool.h"
 #include "firework.h"
 #include "skybox.h"
+#include "model.h"
 
 #include <irrKlang/irrKlang.h>
 
@@ -168,6 +169,10 @@ int main()
     glEnable(GL_PROGRAM_POINT_SIZE);
     Shader particleShader("particle_test_vs.glsl", "particle_test_fs.glsl");
     Shader skyShader("skybox_test_vs.glsl", "skybox_text_fs.glsl");
+
+    // Blinn_Phong Shader
+    Shader lightingShader("Blinn_Phong_vs.glsl", "Blinn_Phong_fs.glsl");
+
     // 测试粒子系统
     /*ParticleSystem ps(10000);*/
     //ParticleSystem* ps = new ParticleSystem(10);
@@ -190,22 +195,31 @@ int main()
     fw.init(fp);
 
     SkyBox sb;
-    /*std::vector<std::string> boxes{
-        std::string("DOOM16RT.png"),
-        std::string("DOOM16LF.png"),
-        std::string("DOOM16UP.png"),
-        std::string("DOOM16DN.png"),
-        std::string("DOOM16FT.png"),
-        std::string("DOOM16BK.png"),
-    };*/
     std::vector<std::string> boxes{
-        std::string("right.jpg"),
-        std::string("left.jpg"),
-        std::string("top.jpg"),
-        std::string("bottom.jpg"),
-        std::string("front.jpg"),
-        std::string("back.jpg"),
-    };
+        std::string("skybox/px.jpg"),
+        std::string("skybox/nx.jpg"),
+        std::string("skybox/py.jpg"),
+        std::string("skybox/ny.jpg"),
+        std::string("skybox/pz.jpg"),
+        std::string("skybox/nz.jpg"),
+    }; 
+    /*std::vector<std::string> boxes{
+        std::string("skybox/posx.jpg"),
+        std::string("skybox/negx.jpg"),
+        std::string("skybox/posy.jpg"),
+        std::string("skybox/negy.jpg"),
+        std::string("skybox/posz.jpg"),
+        std::string("skybox/negz.jpg"),
+    };*/
+    /*std::vector<std::string> boxes{
+        std::string("skybox/right.jpg"),
+        std::string("skybox/left.jpg"),
+        std::string("skybox/top.jpg"),
+        std::string("skybox/bottom.jpg"),
+        std::string("skybox/front.jpg"),
+        std::string("skybox/back.jpg"),
+    };*/
+   
     sb.loadMap(boxes);
 
     skyShader.use();
@@ -215,6 +229,9 @@ int main()
     SoundEngine->play2D("./rise.wav", GL_FALSE);
     SoundEngine->play2D("./explosion.wav", GL_FALSE);
     SoundEngine->stopAllSounds();
+
+    // 模型
+    // Model Manor("./Castle/Castle OBJ.obj");
 
     // render loop
     // -----------
@@ -286,6 +303,7 @@ int main()
         //ps->draw(particleShader);
 
         fw.light(particleShader, delta_time);
+        
 
         skyShader.use();
         glm::mat4 view = glm::mat4(glm::mat3(camera.GetViewMatrix())); // remove translation from the view matrix

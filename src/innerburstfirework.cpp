@@ -71,7 +71,7 @@ bool innerburstfirework::isAlive()
 /// </summary>
 /// <param name="shader">渲染所用的着色器</param>
 /// <param name="delta_time">每帧之间的间隔时间</param>
-void innerburstfirework::light(Shader& shader, float delta_time) {
+void innerburstfirework::light(Shader& shader, float delta_time,int second_trails_num) {
 
 	time_cnt += delta_time;
 	if (time_cnt < explode_time) {
@@ -99,7 +99,7 @@ void innerburstfirework::light(Shader& shader, float delta_time) {
 			{
 				std::cout << "gen" << std::endl;
 				explodedTwice = true;
-				for (int j = 0; j < 500; ++j) {
+				for (int j = 0; j < second_trails_num; ++j) {
 					ptr p = std::make_shared<ParticleSystem>(10000, false);
 					// 初始化生成的节点，参数可以改
 					Particle base;

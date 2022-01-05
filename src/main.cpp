@@ -197,7 +197,7 @@ int main()
         CastleShader.setMat4("projection", projection);
         glm::mat4 castleTransform = glm::mat4(1.0f);
         castleTransform = glm::translate(castleTransform, glm::vec3(0.0f, -1.0f, 0.0f));
-        castleTransform = glm::scale(castleTransform, glm::vec3(0.01f, 0.01f, 0.01f));
+        castleTransform = glm::scale(castleTransform, glm::vec3(0.005f, 0.005f, 0.005f));
         castleTransform = glm::rotate(castleTransform, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         CastleShader.setMat4("model", castleTransform);
         // 传递点光源给着色器
@@ -247,17 +247,38 @@ void processInput(GLFWwindow* window)
                 if (i == 0)
                 {
                     newFireWork = new innerburstfirework(4.0f);
+
+                    fireworkParam fp;
+                    fp.trails_num = 300;
+                    fp.explode_num = 0;
+                    fp.tp.max_trail = 60;
+                    fp.tp.min_trail = 40;
+                    newFireWork->init(fp);
                 }
-                else
+                else if (i==1)
                 {
                     newFireWork = new bigfirework(4.0f);
+
+                    fireworkParam fp;
+                    fp.trails_num = 300;
+                    fp.explode_num = 0;
+                    fp.tp.max_trail = 60;
+                    fp.tp.min_trail = 40;
+                    newFireWork->init(fp);
                 }
-                fireworkParam fp;
-                fp.trails_num = 300;
-                fp.explode_num = 0;
-                fp.tp.max_trail = 60;
-                fp.tp.min_trail = 40;
-                newFireWork->init(fp);
+                else if (i == 2)
+                {
+                    newFireWork = new Firework(4.0f);
+
+                    fireworkParam fp;
+                    fp.trails_num = 100;
+                    fp.explode_num = 0;
+                    fp.tp.max_trail = 60;
+                    fp.tp.min_trail = 40;
+                    newFireWork->init(fp);
+                }
+
+                
 
                 fireworks.push_back(make_pair(newFireWork, true));
             }

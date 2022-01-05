@@ -16,7 +16,7 @@ struct Light {
     float intensity;
 };
 
-uniform Light light_list[20];
+uniform Light light_list[100];
 uniform int num_lights;
 uniform sampler2D texture_diffuse1;
 uniform vec3 viewPos;

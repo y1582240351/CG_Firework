@@ -92,9 +92,6 @@ void Firework::light(Shader& shader, float delta_time) {
 		//fwp.trails_num
 		for (int i = 0; i < trails.size(); ++i) {
 			if (trails[i]->isDied()) // 不再渲染死亡的粒子团
-<<<<<<< HEAD
-				continue;
-=======
 			{
 				if (trails[i]->haveAnotherChance() == true)
 				{
@@ -129,7 +126,6 @@ void Firework::light(Shader& shader, float delta_time) {
 					}
 				}
 			}
->>>>>>> origin/main
 			trails[i]->trailGen(delta_time, 0.7, 0.07);
 			trails[i]->draw(shader);
 		}

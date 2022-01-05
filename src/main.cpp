@@ -108,56 +108,6 @@ int main()
 
     // Blinn_Phong Shader
     Shader lightingShader("Blinn_Phong_vs.glsl", "Blinn_Phong_fs.glsl");
-<<<<<<< HEAD
-
-    // 测试粒子系统
-    /*ParticleSystem ps(10000);*/
-    //ParticleSystem* ps = new ParticleSystem(10);
-    //Particle p;
-    //p.position = glm::fvec3(0.0f, 0.0f, 0.0f);
-    //p.color = glm::fvec4(0.1f, 0.4f, 0.3f, 1.0f);
-    //p.velocity = glm::fvec3(0.0f, 0.0100f, 0.0f);
-    //p.life = 200.0f;
-    //p.size = 5.0f;
-    ////ps->initExplode(p, 0.1);
-    //ps->initTrail(p);
-
-    // 测试烟花
-    Firework fw(4.0f);
-    fireworkParam fp;
-    fp.trails_num = 60;
-    fp.explode_num = 0;
-    fp.tp.max_trail = 60;
-    fp.tp.min_trail = 40;
-    fw.init(fp);
-
-    SkyBox sb;
-    std::vector<std::string> boxes{
-        std::string("skybox/px.jpg"),
-        std::string("skybox/nx.jpg"),
-        std::string("skybox/py.jpg"),
-        std::string("skybox/ny.jpg"),
-        std::string("skybox/pz.jpg"),
-        std::string("skybox/nz.jpg"),
-    }; 
-    /*std::vector<std::string> boxes{
-        std::string("skybox/posx.jpg"),
-        std::string("skybox/negx.jpg"),
-        std::string("skybox/posy.jpg"),
-        std::string("skybox/negy.jpg"),
-        std::string("skybox/posz.jpg"),
-        std::string("skybox/negz.jpg"),
-    };*/
-    /*std::vector<std::string> boxes{
-        std::string("skybox/right.jpg"),
-        std::string("skybox/left.jpg"),
-        std::string("skybox/top.jpg"),
-        std::string("skybox/bottom.jpg"),
-        std::string("skybox/front.jpg"),
-        std::string("skybox/back.jpg"),
-    };*/
-   
-=======
 
     SkyBox sb;
 
@@ -169,7 +119,6 @@ int main()
         std::string("./skybox/front.jpg"),
         std::string("./skybox/back.jpg"),
     };
->>>>>>> origin/main
     sb.loadMap(boxes);
 
     skyShader.use();
@@ -179,12 +128,6 @@ int main()
     SoundEngine->play2D("./rise.wav", GL_FALSE);
     SoundEngine->play2D("./explosion.wav", GL_FALSE);
     SoundEngine->stopAllSounds();
-
-<<<<<<< HEAD
-    // 模型
-    // Model Manor("./Castle/Castle OBJ.obj");
-
-=======
     
 
 
@@ -200,8 +143,6 @@ int main()
     fp.tp.min_trail = 40;
     fw.init(fp);*/
 
-   
-
     /*groundfirework fw(4.0f);
     fireworkParam fp;
     fp.trails_num = 300;
@@ -210,10 +151,6 @@ int main()
     fp.tp.min_trail = 40;
     fw.init(fp);*/
 
-    
-
-
->>>>>>> origin/main
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window))
@@ -233,14 +170,7 @@ int main()
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
         particleShader.use();
-<<<<<<< HEAD
-        ////ps->explode(delta_time);
-        //ps->trail(delta_time);
-        //ps->draw(particleShader);
 
-        fw.light(particleShader, delta_time);
-        
-=======
         particleShader.setMat4("view", view);
         particleShader.setMat4("projection", projection);
         
@@ -260,7 +190,6 @@ int main()
                 }
             }
         }
->>>>>>> origin/main
 
         skyShader.use();
         

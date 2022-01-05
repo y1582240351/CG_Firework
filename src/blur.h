@@ -6,8 +6,8 @@
 #include "shader.hpp"
 
 // 窗口大小
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_WIDTH = 1600;
+const unsigned int SCR_HEIGHT = 900;
 
 class Blur
 {

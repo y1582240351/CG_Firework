@@ -56,6 +56,10 @@ public:
 
 	virtual void light(Shader& shder, float delta_time);
 
+	virtual glm::vec3 get_explode_position() = 0;
+
+	virtual glm::vec4 get_explode_color() = 0;
+
 private:
 	std::vector<ptr> trails;	// 产生拖尾的粒子团，第0个是释放时的主粒子
 	std::vector<ptr> explosions; // 产生爆炸效果的粒子团

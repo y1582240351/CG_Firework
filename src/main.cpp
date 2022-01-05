@@ -1,8 +1,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl3.h"
 
 #include <stdlib.h>
 #include <iostream>

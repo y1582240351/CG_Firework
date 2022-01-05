@@ -1,8 +1,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl3.h"
 
 #include <stdlib.h>
 #include <iostream>
@@ -27,6 +27,8 @@
 #include "skybox.h"
 #include "model.h"
 
+#include "bloom.h"
+
 #include <irrKlang/irrKlang.h>
 
 using namespace std;
@@ -37,8 +39,8 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow* window);
 
 // settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_WIDTH = 1600;
+const unsigned int SCR_HEIGHT = 900;
 const unsigned int FIREWORK_TYPES = 3;
 const unsigned int FIREWORK_LIMITATIONS = 50;
 // camera
@@ -116,11 +118,20 @@ int main()
 
 
     glEnable(GL_PROGRAM_POINT_SIZE);
-    Shader particleShader("particle_test_vs.glsl", "particle_test_fs.glsl");
+    //Shader particleShader("particle_test_vs.glsl", "particle_test_fs.glsl");
+    Shader particleShader("particle_test_vs.glsl", "firework_bloom_fs.glsl");
     Shader skyShader("skybox_test_vs.glsl", "skybox_text_fs.glsl");
 
     // Blinn_Phong Shader
     Shader lightingShader("Blinn_Phong_vs.glsl", "Blinn_Phong_fs.glsl");
+
+    // bloom
+    Shader fireworkShader("particle_test_vs.glsl", "firework_bloom_fs.glsl");
+    Shader blurShader("blur_vs.glsl", "blur_fs.glsl");
+    Shader bloomShader("bloom_final_vs.glsl", "bloom_final_fs.glsl");
+
+    Bloom bloom(SCR_WIDTH , SCR_HEIGHT);
+    bloom.initBlurFB();
 
     SkyBox sb;
 
@@ -224,6 +235,9 @@ int main()
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        bloom.activateConfigFB();
+
+
         float delta_time = timer();
 
         glm::mat4 view = glm::mat4(glm::mat3(camera.GetViewMatrix())); // remove translation from the view matrix
@@ -256,6 +270,10 @@ int main()
         skyShader.setMat4("view", view);
         skyShader.setMat4("projection", projection);
         sb.draw(skyShader);
+
+
+        bloom.blur(blurShader);
+        bloom.finalShade(bloomShader);
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

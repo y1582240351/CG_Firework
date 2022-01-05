@@ -6,6 +6,7 @@
 			[
 				{
 					"build" : ".",
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.0"
@@ -49,14 +50,14 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "CG-Firework::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-CG-Firework-Debug-ac4676a7924a36deec59.json",
+					"jsonFile" : "target-CG-Firework-Debug-3a845d3e8795aa4f25a5.json",
 					"name" : "CG-Firework",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-ZERO_CHECK-Debug-3c54a971027b11f85a7d.json",
+					"jsonFile" : "target-ZERO_CHECK-Debug-8ede4dfbd2cbedd34b94.json",
 					"name" : "ZERO_CHECK",
 					"projectIndex" : 0
 				}
@@ -67,6 +68,7 @@
 			[
 				{
 					"build" : ".",
+					"jsonFile" : "directory-.-Release-d0094a50bb2071803777.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.0"
@@ -110,14 +112,14 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "CG-Firework::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-CG-Firework-Release-c3aaaf749daab23a8792.json",
+					"jsonFile" : "target-CG-Firework-Release-98c42aab020c715d96f7.json",
 					"name" : "CG-Firework",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-ZERO_CHECK-Release-3c54a971027b11f85a7d.json",
+					"jsonFile" : "target-ZERO_CHECK-Release-8ede4dfbd2cbedd34b94.json",
 					"name" : "ZERO_CHECK",
 					"projectIndex" : 0
 				}
@@ -128,6 +130,7 @@
 			[
 				{
 					"build" : ".",
+					"jsonFile" : "directory-.-MinSizeRel-d0094a50bb2071803777.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.0"
@@ -171,14 +174,14 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "CG-Firework::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-CG-Firework-MinSizeRel-8372f4bb45112990e7f6.json",
+					"jsonFile" : "target-CG-Firework-MinSizeRel-3d98d7a1d7e0503be5bf.json",
 					"name" : "CG-Firework",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-ZERO_CHECK-MinSizeRel-3c54a971027b11f85a7d.json",
+					"jsonFile" : "target-ZERO_CHECK-MinSizeRel-8ede4dfbd2cbedd34b94.json",
 					"name" : "ZERO_CHECK",
 					"projectIndex" : 0
 				}
@@ -189,6 +192,7 @@
 			[
 				{
 					"build" : ".",
+					"jsonFile" : "directory-.-RelWithDebInfo-d0094a50bb2071803777.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.0"
@@ -232,14 +236,14 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "CG-Firework::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-CG-Firework-RelWithDebInfo-cb42407277004c31c401.json",
+					"jsonFile" : "target-CG-Firework-RelWithDebInfo-d63e1603a11183213789.json",
 					"name" : "CG-Firework",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-ZERO_CHECK-RelWithDebInfo-3c54a971027b11f85a7d.json",
+					"jsonFile" : "target-ZERO_CHECK-RelWithDebInfo-8ede4dfbd2cbedd34b94.json",
 					"name" : "ZERO_CHECK",
 					"projectIndex" : 0
 				}
@@ -249,12 +253,12 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "D:/computer_graphics/CG_Firework/build",
-		"source" : "D:/computer_graphics/CG_Firework"
+		"build" : "C:/Users/zjnyl/Documents/GitHub/CG_Firework/build",
+		"source" : "C:/Users/zjnyl/Documents/GitHub/CG_Firework"
 	},
 	"version" : 
 	{
 		"major" : 2,
-		"minor" : 2
+		"minor" : 3
 	}
 }

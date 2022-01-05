@@ -71,7 +71,7 @@ bool innerburstfirework::isAlive()
 /// </summary>
 /// <param name="shader">渲染所用的着色器</param>
 /// <param name="delta_time">每帧之间的间隔时间</param>
-void innerburstfirework::light(Shader& shader, float delta_time,int second_trails_num) {
+void innerburstfirework::light(Shader& shader, float delta_time, int second_trails_num) {
 
 	time_cnt += delta_time;
 	if (time_cnt < explode_time) {
@@ -137,6 +137,7 @@ void innerburstfirework::light(Shader& shader, float delta_time,int second_trail
 /// 生成烟花炸开时产生的流苏
 /// </summary>
 void innerburstfirework::genTrails() {
+	explode_color = trails[0]->get_color();
 	glm::fvec3 explode_pos = trails[0]->posTrail();
 	trails.resize(fwp.trails_num+1);
 	//ParticleSystem::setTexture("texture_img/light_PNG14431.png");
@@ -162,4 +163,16 @@ void innerburstfirework::genTrails() {
 		p->initTrailGen(base, param);
 		trails[i] = p;
 	}
+}
+
+bool innerburstfirework::isExploded() {
+	return explodedOnce;
+}
+
+glm::fvec3 innerburstfirework::get_explode_position() {
+	return explodePosition;
+}
+
+glm::fvec4 innerburstfirework::get_explode_color() {
+	return explode_color;
 }

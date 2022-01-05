@@ -124,12 +124,15 @@ void bigfirework::light(Shader& shader, float delta_time, int second_trails_num)
 							trails.push_back(p);
 						}
 					}
-					//trails[i]->youCanDie();
+					trails[i]->youCanDie();
 				}
 				
 			}
-			trails[i]->trailGen(delta_time, 0.7, 0.07);
-			trails[i]->draw(shader);
+			else
+			{
+				trails[i]->trailGen(delta_time, 0.7, 0.07);
+				trails[i]->draw(shader);
+			}
 		}
 	}
 }
@@ -139,7 +142,9 @@ void bigfirework::light(Shader& shader, float delta_time, int second_trails_num)
 /// 生成烟花炸开时产生的流苏
 /// </summary>
 void bigfirework::genTrails() {
+	explode_color = trails[0]->get_color();
 	glm::fvec3 explode_pos = trails[0]->posTrail();
+	explode_position = explode_pos;
 	trails.resize(fwp.trails_num);
 	//ParticleSystem::setTexture("texture_img/light_PNG14431.png");
 	for (int i = 0; i < fwp.trails_num; ++i) {
@@ -164,4 +169,16 @@ void bigfirework::genTrails() {
 		p->initTrailGen(base, param);
 		trails[i] = p;
 	}
+}
+
+bool bigfirework::isExploded() {
+	return exploded;
+}
+
+glm::fvec3 bigfirework::get_explode_position() {
+	return explode_position;
+}
+
+glm::fvec4 bigfirework::get_explode_color() {
+	return explode_color;
 }

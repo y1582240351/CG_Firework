@@ -33,6 +33,30 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow* window);
 
+//fireworks
+std::vector<std::pair<Firework*, bool>>fireworks;
+
+// 传递点光源给着色器
+void set_point_light(Shader& blinnphongshader)
+{
+    int count = 0;
+    string struct_string = "light_list[";
+    string color_string = "].Color";
+    string pos_string = "].Position";
+    string intensity_string = "].intensity";
+    for (int i = 0; i < fireworks.size(); i++)
+    {
+        if (fireworks[i].second == true && fireworks[i].first->isExploded() && fireworks[i].first->isAlive() == true)
+        {
+            blinnphongshader.setVec3(struct_string + to_string(count) + color_string, 1.0f, 1.0f, 1.0f);
+            blinnphongshader.setVec3(struct_string + to_string(count) + pos_string, 0.0f, 0.0f, 0.0f);
+            blinnphongshader.setFloat(struct_string + to_string(count) + intensity_string, 1.0f);
+            count++;
+        }
+    }
+    blinnphongshader.setInt("num_lights", count);
+}
+
 // settings
 //const unsigned int SCR_WIDTH = 1600;
 //const unsigned int SCR_HEIGHT = 900;
@@ -57,8 +81,7 @@ irrklang::ISoundEngine* SoundEngine = irrklang::createIrrKlangDevice();
 //KEY BOARD STATUS
 bool PRESS[FIREWORK_TYPES] = { 0 };
 
-//fireworks
-std::vector<std::pair<Firework*, bool>>fireworks;
+
 
 
 int main()
@@ -133,12 +156,9 @@ int main()
     SoundEngine->play2D("./explosion.wav", GL_FALSE);
     SoundEngine->stopAllSounds();
 
-    
-
-
     // 模型
-    // Model Manor("./Castle/Castle OBJ.obj");
-
+    Model ourModel("./Castle/Castle OBJ.obj");
+    Shader modelShader("model_shader_vs.glsl", "model_shader_fs.glsl");
 
    /* bigfirework fw(4.0f);
     fireworkParam fp;
@@ -157,9 +177,7 @@ int main()
     fp.tp.max_trail = 60;
     fp.tp.min_trail = 40;
     fw.init(fp);*/
-
     
-
     Blur blur;
     // render loop
     // -----------
@@ -169,12 +187,12 @@ int main()
         // -----
         processInput(window);
 
-        blur.bindFrameBuffer();
-
         // render
         // ------
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        blur.bindFrameBuffer();
 
         float delta_time = timer();
         deltaTime = delta_time;
@@ -202,6 +220,20 @@ int main()
                 }
             }
         }
+
+        // model
+        // render the loaded model
+        modelShader.use();
+        modelShader.setMat4("projection", projection);
+        modelShader.setMat4("view", view);
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(0.0f, -20.0f, 0.0f)); // translate it down so it's at the center of the scene
+        model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));	// it's a bit too big for our scene, so scale it down
+        model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        modelShader.setMat4("model", model);
+        // 将烟花所有点光源传给着色器
+        set_point_light(modelShader);
+        ourModel.Draw(modelShader);
 
         skyShader.use();
         

@@ -124,12 +124,15 @@ void bigfirework::light(Shader& shader, float delta_time) {
 							trails.push_back(p);
 						}
 					}
-					//trails[i]->youCanDie();
+					trails[i]->youCanDie();
 				}
 				
 			}
-			trails[i]->trailGen(delta_time, 0.7, 0.07);
-			trails[i]->draw(shader);
+			else
+			{
+				trails[i]->trailGen(delta_time, 0.7, 0.07);
+				trails[i]->draw(shader);
+			}
 		}
 	}
 }

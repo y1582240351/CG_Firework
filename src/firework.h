@@ -56,6 +56,8 @@ public:
 
 	virtual void light(Shader& shder, float delta_time);
 
+	virtual bool isExploded() = 0;
+
 	virtual glm::vec3 get_explode_position() = 0;
 
 	virtual glm::vec4 get_explode_color() = 0;

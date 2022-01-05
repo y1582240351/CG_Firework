@@ -20,7 +20,13 @@ public:
 
 	void init(fireworkParam fwp);
 
-	void light(Shader& shder, float delta_time, int second_trails_num);
+	void light(Shader& shder, float delta_time);
+
+	bool isExploded();
+
+	glm::fvec3 get_explode_position();
+
+	glm::fvec4 get_explode_color();
 
 private:
 	std::vector<ptr> trails;	// 产生拖尾的粒子团，第0个是释放时的主粒子
@@ -30,6 +36,7 @@ private:
 	bool explodedOnce, explodedTwice;
 	glm::fvec3 explodePosition;
 	bool canExplodeTwice;
+	glm::fvec4 explode_color;
 };
 
 

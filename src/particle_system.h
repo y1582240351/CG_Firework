@@ -88,6 +88,8 @@ public:
 
     void initTrailGen(Particle& base_particle, GenParam& param);
 
+    glm::fvec4 get_color();
+
 private:
     // 使用了四个VBO，
     // 其中第0个用来储存粒子的顶点坐标，第1个用来储存粒子的中心位置offset，第2个用来储存粒子的颜色信息，第3个储存粒子的大小

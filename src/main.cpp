@@ -1,9 +1,5 @@
 #define STB_IMAGE_IMPLEMENTATION
 
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_glfw.h"
-#include "imgui/imgui_impl_opengl3.h"
-
 #include <stdlib.h>
 #include <iostream>
 #include <filesystem>
@@ -26,6 +22,7 @@
 #include "innerburstfirework.h"
 #include "skybox.h"
 #include "model.h"
+#include "blur.h"
 
 #include "bloom.h"
 
@@ -38,13 +35,19 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow* window);
 
+// 传递点光源给着色器
+void set_point_light(Shader& blinnphongshader);
+
+//fireworks
+std::vector<std::pair<Firework*, bool>>fireworks;
+
 // settings
-const unsigned int SCR_WIDTH = 1600;
-const unsigned int SCR_HEIGHT = 900;
+//const unsigned int SCR_WIDTH = 1600;
+//const unsigned int SCR_HEIGHT = 900;
 const unsigned int FIREWORK_TYPES = 3;
 const unsigned int FIREWORK_LIMITATIONS = 50;
 // camera
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+Camera camera(glm::vec3(0.0f, 0.0f, 0.0f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -61,19 +64,6 @@ irrklang::ISoundEngine* SoundEngine = irrklang::createIrrKlangDevice();
 
 //KEY BOARD STATUS
 bool PRESS[FIREWORK_TYPES] = { 0 };
-
-//fireworks
-std::vector<std::pair<Firework*, bool>>fireworks;
-
-float explode_time = 4.0f;
-int first_trails_num = 300;
-int second_trails_num = 500;
-int explode_num = 0;
-int max_trail = 60;
-int min_trail = 40;
-
-// mouse
-bool open_gui = true;
 
 int main()
 {
@@ -121,17 +111,9 @@ int main()
     //Shader particleShader("particle_test_vs.glsl", "particle_test_fs.glsl");
     Shader particleShader("particle_test_vs.glsl", "firework_bloom_fs.glsl");
     Shader skyShader("skybox_test_vs.glsl", "skybox_text_fs.glsl");
-
-    // Blinn_Phong Shader
-    Shader lightingShader("Blinn_Phong_vs.glsl", "Blinn_Phong_fs.glsl");
-
-    // bloom
-    Shader fireworkShader("particle_test_vs.glsl", "firework_bloom_fs.glsl");
-    Shader blurShader("blur_vs.glsl", "blur_fs.glsl");
-    Shader bloomShader("bloom_final_vs.glsl", "bloom_final_fs.glsl");
-
-    Bloom bloom(SCR_WIDTH , SCR_HEIGHT);
-    bloom.initBlurFB();
+    Shader BlurShader("Result.vs", "Blur.fs");
+    Shader ResultShader("Result.vs", "Result.fs");
+    Shader CastleShader("model_shader_vs.glsl", "model_shader_fs.glsl");
 
     SkyBox sb;
 
@@ -145,36 +127,15 @@ int main()
     };
     sb.loadMap(boxes);
 
-    skyShader.use();
-    skyShader.setInt("skybox", 0);
-
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    ImGui::StyleColorsDark();
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init("#version 330");
-
     // 音频
     SoundEngine->play2D("./rise.wav", GL_FALSE);
     SoundEngine->play2D("./explosion.wav", GL_FALSE);
     SoundEngine->stopAllSounds();
-    
-
 
     // 模型
-    // Model Manor("./Castle/Castle OBJ.obj");
+    Model castle("Castle/Castle OBJ2.obj");
 
-
-    /*bigfirework fw(4.0f);
-    fireworkParam fp;
-    fp.trails_num = 300;
-    fp.explode_num = 0;
-    fp.tp.max_trail = 60;
-    fp.tp.min_trail = 40;
-    fw.init(fp);*/
-
-    /*innerburstfirework fw(4.0f);
+   /* bigfirework fw(4.0f);
     fireworkParam fp;
     fp.trails_num = 300;
     fp.explode_num = 0;
@@ -189,58 +150,27 @@ int main()
     fp.tp.max_trail = 60;
     fp.tp.min_trail = 40;
     fw.init(fp);*/
-
-    //fireworks.push_back(make_pair(&fw, true));
-
-
-
-
-
+    
+    Blur blur;
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window))
     {
-
         // input
         // -----
         processInput(window);
-
-        //IMGUI
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-
-        if (open_gui) {
-            ImGui::Begin("Fire Work GUI!", &open_gui);               // Create a window called "Hello, world!" and append into it
-            ImGui::Text("Parameters of fireworks");               // Display some text (you can use a format strings too)
-
-            ImGui::SliderFloat("explode_time", &explode_time, 2.0f, 6.0f);
-            ImGui::SliderInt("first_trails_num", &first_trails_num, 60, 400);
-            ImGui::SliderInt("second_trails_num", &second_trails_num, 60, 700);
-            ImGui::SliderInt("explode_num", &explode_num, 0, 3);
-            ImGui::SliderInt("max_trail", &max_trail, 30, first_trails_num);
-            ImGui::SliderInt("min_trails", &min_trail, 30, first_trails_num);
-
-            //ImGui::ColorEdit3("clear_color", (float*)&clear_color);
-            //ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-            ImGui::End();
-        }
-
-        // tell GLFW to capture our mouse
-        if (open_gui) glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-        else glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
         // render
         // ------
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        bloom.activateConfigFB();
-
+        blur.bindFrameBuffer();
 
         float delta_time = timer();
+        deltaTime = delta_time;
 
-        glm::mat4 view = glm::mat4(glm::mat3(camera.GetViewMatrix())); // remove translation from the view matrix
+        glm::mat4 view = camera.GetViewMatrix(); // remove translation from the view matrix
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
         particleShader.use();
@@ -254,7 +184,7 @@ int main()
             {
                 if (fireworks[i].first->isAlive() == true)
                 {
-                    fireworks[i].first->light(particleShader, delta_time,second_trails_num);
+                    fireworks[i].first->light(particleShader, delta_time);
                 }
                 else
                 {
@@ -265,18 +195,30 @@ int main()
             }
         }
 
+        // model
+        CastleShader.use();
+        CastleShader.setMat4("view", view);
+        CastleShader.setMat4("projection", projection);
+        glm::mat4 castleTransform = glm::mat4(1.0f);
+        castleTransform = glm::translate(castleTransform, glm::vec3(0.0f, -1.0f, 0.0f));
+        castleTransform = glm::scale(castleTransform, glm::vec3(0.005f, 0.005f, 0.005f));
+        castleTransform = glm::rotate(castleTransform, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        CastleShader.setMat4("model", castleTransform);
+        // 传递点光源给着色器
+        set_point_light(CastleShader);
+        // 渲染城堡模型
+        castle.Draw(CastleShader);
+
+        // skybox
         skyShader.use();
-        
+        skyShader.setInt("skybox", 0);
         skyShader.setMat4("view", view);
         skyShader.setMat4("projection", projection);
+        //skyShader.setVec3("viewPos", camera.Position);
+        //skyShader.setVec3("lightPos", 0.0f, 0.0f, 0.0f);
         sb.draw(skyShader);
 
-
-        bloom.blur(blurShader);
-        bloom.finalShade(bloomShader);
-
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        blur.blurTheFrame(BlurShader, ResultShader);
 
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
@@ -285,9 +227,6 @@ int main()
     }
     //delete ps;
 
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
    
     glfwTerminate();
     return 0;
@@ -311,18 +250,39 @@ void processInput(GLFWwindow* window)
                 Firework* newFireWork = nullptr;
                 if (i == 0)
                 {
-                    newFireWork = new innerburstfirework(explode_time);
+                    newFireWork = new innerburstfirework(4.0f);
+
+                    fireworkParam fp;
+                    fp.trails_num = 300;
+                    fp.explode_num = 0;
+                    fp.tp.max_trail = 60;
+                    fp.tp.min_trail = 40;
+                    newFireWork->init(fp);
                 }
-                else
+                else if (i==1)
                 {
-                    newFireWork = new bigfirework(explode_time);
+                    newFireWork = new bigfirework(4.0f);
+
+                    fireworkParam fp;
+                    fp.trails_num = 300;
+                    fp.explode_num = 0;
+                    fp.tp.max_trail = 60;
+                    fp.tp.min_trail = 40;
+                    newFireWork->init(fp);
                 }
-                fireworkParam fp;
-                fp.trails_num = first_trails_num;
-                fp.explode_num = explode_num;
-                fp.tp.max_trail = max_trail;
-                fp.tp.min_trail = min_trail;
-                newFireWork->init(fp);
+                else if (i == 2)
+                {
+                    newFireWork = new Firework(4.0f);
+
+                    fireworkParam fp;
+                    fp.trails_num = 100;
+                    fp.explode_num = 0;
+                    fp.tp.max_trail = 60;
+                    fp.tp.min_trail = 40;
+                    newFireWork->init(fp);
+                }
+
+                
 
                 fireworks.push_back(make_pair(newFireWork, true));
             }
@@ -378,4 +338,26 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
     camera.ProcessMouseScroll(yoffset);
+}
+
+// 传递点光源给着色器
+void set_point_light(Shader& blinnphongshader)
+{
+    int count = 0;
+    string struct_string = "light_list[";
+    string color_string = "].Color";
+    string pos_string = "].Position";
+    string intensity_string = "].intensity";
+    for (int i = 0; i < fireworks.size(); i++)
+    {
+        if (fireworks[i].second == true && fireworks[i].first->isExploded() == true && fireworks[i].first->isAlive() == true)
+        {
+            Firework* ptr = fireworks[i].first;
+            blinnphongshader.setVec3(struct_string + to_string(count) + color_string, ptr->get_explode_color());
+            blinnphongshader.setVec3(struct_string + to_string(count) + pos_string, ptr->get_explode_position());
+            blinnphongshader.setFloat(struct_string + to_string(count) + intensity_string, 1.0f);
+            count++;
+        }
+    }
+    blinnphongshader.setInt("num_lights", count);
 }

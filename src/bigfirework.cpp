@@ -70,7 +70,7 @@ bool bigfirework::isAlive()
 /// </summary>
 /// <param name="shader">渲染所用的着色器</param>
 /// <param name="delta_time">每帧之间的间隔时间</param>
-void bigfirework::light(Shader& shader, float delta_time, int second_trails_num) {
+void bigfirework::light(Shader& shader, float delta_time) {
 
 	time_cnt += delta_time;
 	if (time_cnt < explode_time) {
@@ -101,7 +101,7 @@ void bigfirework::light(Shader& shader, float delta_time, int second_trails_num)
 
 					if (chance > 0.9)
 					{
-						for (int j = 0; j < second_trails_num/5; ++j) {
+						for (int j = 0; j < 100; ++j) {
 							ptr p = std::make_shared<ParticleSystem>(50, false);
 							// 初始化生成的节点，参数可以改
 							Particle base;
@@ -124,12 +124,14 @@ void bigfirework::light(Shader& shader, float delta_time, int second_trails_num)
 							trails.push_back(p);
 						}
 					}
+					trails[i]->youCanDie();
 				}
 				/*trails[i] = trails[trails.size() - 1];
 				trails.pop_back();*/
 				trails[i]->youCanDie();
 			}
-			else {
+			else
+			{
 				trails[i]->trailGen(delta_time, 0.7, 0.07);
 				trails[i]->draw(shader);
 			}
@@ -142,7 +144,9 @@ void bigfirework::light(Shader& shader, float delta_time, int second_trails_num)
 /// 生成烟花炸开时产生的流苏
 /// </summary>
 void bigfirework::genTrails() {
+	explode_color = trails[0]->get_color();
 	glm::fvec3 explode_pos = trails[0]->posTrail();
+	explode_position = explode_pos;
 	trails.resize(fwp.trails_num);
 	//ParticleSystem::setTexture("texture_img/light_PNG14431.png");
 	for (int i = 0; i < fwp.trails_num; ++i) {
@@ -167,4 +171,16 @@ void bigfirework::genTrails() {
 		p->initTrailGen(base, param);
 		trails[i] = p;
 	}
+}
+
+bool bigfirework::isExploded() {
+	return exploded;
+}
+
+glm::fvec3 bigfirework::get_explode_position() {
+	return explode_position;
+}
+
+glm::fvec4 bigfirework::get_explode_color() {
+	return explode_color;
 }

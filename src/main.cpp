@@ -197,7 +197,7 @@ int main()
         CastleShader.setMat4("projection", projection);
         glm::mat4 castleTransform = glm::mat4(1.0f);
         castleTransform = glm::translate(castleTransform, glm::vec3(0.0f, -1.0f, 0.0f));
-        castleTransform = glm::scale(castleTransform, glm::vec3(0.005f, 0.005f, 0.005f));
+        castleTransform = glm::scale(castleTransform, glm::vec3(0.01f, 0.01f, 0.01f));
         castleTransform = glm::rotate(castleTransform, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         CastleShader.setMat4("model", castleTransform);
         // 传递点光源给着色器

@@ -2,10 +2,10 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "Debug/CG-Firework.exe"
+			"path" : "RelWithDebInfo/CG-Firework.exe"
 		},
 		{
-			"path" : "Debug/CG-Firework.pdb"
+			"path" : "RelWithDebInfo/CG-Firework.pdb"
 		}
 	],
 	"backtrace" : 1,
@@ -59,14 +59,14 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "/DWIN32 /D_WINDOWS /W3 /GR /EHsc;-std=c++11 /MDd /Zi /Ob0 /Od /RTC1"
+					"fragment" : "/DWIN32 /D_WINDOWS /W3 /GR /EHsc;-std=c++11 /MD /Zi /O2 /Ob1 /DNDEBUG"
 				}
 			],
 			"includes" : 
 			[
 				{
 					"backtrace" : 4,
-					"path" : "C:/Users/zjnyl/Documents/GitHub/CG_Firework/includes"
+					"path" : "D:/computer_graphics/CG_Firework/includes"
 				}
 			],
 			"language" : "CXX",
@@ -86,14 +86,14 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "/DWIN32 /D_WINDOWS /W3 /MDd /Zi /Ob0 /Od /RTC1"
+					"fragment" : "/DWIN32 /D_WINDOWS /W3 /MD /Zi /O2 /Ob1 /DNDEBUG"
 				}
 			],
 			"includes" : 
 			[
 				{
 					"backtrace" : 4,
-					"path" : "C:/Users/zjnyl/Documents/GitHub/CG_Firework/includes"
+					"path" : "D:/computer_graphics/CG_Firework/includes"
 				}
 			],
 			"language" : "C",
@@ -115,7 +115,7 @@
 		"commandFragments" : 
 		[
 			{
-				"fragment" : "/DWIN32 /D_WINDOWS /W3 /GR /EHsc;-std=c++11 /MDd /Zi /Ob0 /Od /RTC1",
+				"fragment" : "/DWIN32 /D_WINDOWS /W3 /GR /EHsc;-std=c++11 /MD /Zi /O2 /Ob1 /DNDEBUG",
 				"role" : "flags"
 			},
 			{
@@ -124,7 +124,7 @@
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "-LIBPATH:C:\\Users\\zjnyl\\Documents\\GitHub\\CG_Firework\\lib",
+				"fragment" : "-LIBPATH:D:\\computer_graphics\\CG_Firework\\lib",
 				"role" : "libraryPath"
 			},
 			{

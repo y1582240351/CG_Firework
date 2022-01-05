@@ -11,7 +11,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "C:/Users/zjnyl/Documents/GitHub/CG_Firework/includes"
+			"value" : "D:/computer_graphics/CG_Firework/includes"
 		},
 		{
 			"name" : "ASSIMP_LIBRARY",
@@ -23,7 +23,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Users/zjnyl/Documents/GitHub/CG_Firework/lib/assimp.lib"
+			"value" : "D:/computer_graphics/CG_Firework/lib/assimp.lib"
 		},
 		{
 			"name" : "CG-Firework_BINARY_DIR",
@@ -35,19 +35,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/zjnyl/Documents/GitHub/CG_Firework/build"
-		},
-		{
-			"name" : "CG-Firework_IS_TOP_LEVEL",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Value Computed by CMake"
-				}
-			],
-			"type" : "STATIC",
-			"value" : "ON"
+			"value" : "D:/computer_graphics/CG_Firework/build"
 		},
 		{
 			"name" : "CG-Firework_SOURCE_DIR",
@@ -59,23 +47,19 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "C:/Users/zjnyl/Documents/GitHub/CG_Firework"
+			"value" : "D:/computer_graphics/CG_Firework"
 		},
 		{
 			"name" : "CMAKE_AR",
 			"properties" : 
 			[
 				{
-					"name" : "ADVANCED",
-					"value" : "1"
-				},
-				{
 					"name" : "HELPSTRING",
 					"value" : "Path to a program."
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files (x86)/Microsoft Visual Studio/2019/BuildTools/VC/Tools/MSVC/14.29.30133/bin/Hostx64/x64/lib.exe"
+			"value" : "D:/VS2019/VC/Tools/MSVC/14.27.29110/bin/Hostx64/x64/lib.exe"
 		},
 		{
 			"name" : "CMAKE_CACHEFILE_DIR",
@@ -87,7 +71,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "c:/Users/zjnyl/Documents/GitHub/CG_Firework/build"
+			"value" : "d:/computer_graphics/CG_Firework/build"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -111,7 +95,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "21"
+			"value" : "19"
 		},
 		{
 			"name" : "CMAKE_CACHE_PATCH_VERSION",
@@ -123,7 +107,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "2"
+			"value" : "4"
 		},
 		{
 			"name" : "CMAKE_COMMAND",
@@ -135,7 +119,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "C:/Program Files/CMake/bin/cmake.exe"
+			"value" : "E:/cmake/bin/cmake.exe"
 		},
 		{
 			"name" : "CMAKE_CONFIGURATION_TYPES",
@@ -159,7 +143,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "C:/Program Files/CMake/bin/cpack.exe"
+			"value" : "E:/cmake/bin/cpack.exe"
 		},
 		{
 			"name" : "CMAKE_CTEST_COMMAND",
@@ -171,7 +155,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "C:/Program Files/CMake/bin/ctest.exe"
+			"value" : "E:/cmake/bin/ctest.exe"
 		},
 		{
 			"name" : "CMAKE_CXX_FLAGS",
@@ -491,7 +475,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "C:/Program Files (x86)/Microsoft Visual Studio/2019/BuildTools"
+			"value" : "D:/VS2019"
 		},
 		{
 			"name" : "CMAKE_GENERATOR_PLATFORM",
@@ -527,7 +511,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "C:/Users/zjnyl/Documents/GitHub/CG_Firework"
+			"value" : "D:/computer_graphics/CG_Firework"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -555,7 +539,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Program Files (x86)/Microsoft Visual Studio/2019/BuildTools/VC/Tools/MSVC/14.29.30133/bin/Hostx64/x64/link.exe"
+			"value" : "D:/VS2019/VC/Tools/MSVC/14.27.29110/bin/Hostx64/x64/link.exe"
 		},
 		{
 			"name" : "CMAKE_MODULE_LINKER_FLAGS",
@@ -714,18 +698,6 @@
 			"value" : "CG-Firework"
 		},
 		{
-			"name" : "CMAKE_RANLIB",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "noop for ranlib"
-				}
-			],
-			"type" : "INTERNAL",
-			"value" : ":"
-		},
-		{
 			"name" : "CMAKE_RC_COMPILER",
 			"properties" : 
 			[
@@ -843,7 +815,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "C:/Program Files/CMake/share/cmake-3.21"
+			"value" : "E:/cmake/share/cmake-3.19"
 		},
 		{
 			"name" : "CMAKE_SHARED_LINKER_FLAGS",
@@ -1063,7 +1035,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "[C:/Users/zjnyl/Documents/GitHub/CG_Firework/lib/glfw3.lib][C:/Users/zjnyl/Documents/GitHub/CG_Firework/includes][v()]"
+			"value" : "[D:/computer_graphics/CG_Firework/lib/glfw3.lib][D:/computer_graphics/CG_Firework/includes][v()]"
 		},
 		{
 			"name" : "FIND_PACKAGE_MESSAGE_DETAILS_GLM",
@@ -1075,7 +1047,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "[C:/Users/zjnyl/Documents/GitHub/CG_Firework/includes][v()]"
+			"value" : "[D:/computer_graphics/CG_Firework/includes][v()]"
 		},
 		{
 			"name" : "GLFW3_INCLUDE_DIR",
@@ -1087,7 +1059,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "C:/Users/zjnyl/Documents/GitHub/CG_Firework/includes"
+			"value" : "D:/computer_graphics/CG_Firework/includes"
 		},
 		{
 			"name" : "GLFW3_LIBRARY",
@@ -1099,7 +1071,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "C:/Users/zjnyl/Documents/GitHub/CG_Firework/lib/glfw3.lib"
+			"value" : "D:/computer_graphics/CG_Firework/lib/glfw3.lib"
 		},
 		{
 			"name" : "GLM_INCLUDE_DIR",
@@ -1111,7 +1083,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "C:/Users/zjnyl/Documents/GitHub/CG_Firework/includes"
+			"value" : "D:/computer_graphics/CG_Firework/includes"
 		}
 	],
 	"kind" : "cache",

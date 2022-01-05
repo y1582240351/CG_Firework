@@ -17,8 +17,8 @@
 //#include "stb_image.h"
 #include "shader.hpp"
 
-#define VERTEX_NUM 108
-
+//#define VERTEX_NUM 108
+#define VERTEX_NUM 216
 
 class SkyBox {
 public:

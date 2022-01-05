@@ -47,7 +47,7 @@ void main()
         float distance = length(vs_out.FragPos - light_list[i].Position);
         result *= 1.0 / (distance * distance);
 
-        result *= 0.7;
+        result *= light_list[i].intensity;
         lighting += result;
     }
 

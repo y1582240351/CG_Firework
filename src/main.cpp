@@ -33,29 +33,11 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow* window);
 
+// 传递点光源给着色器
+void set_point_light(Shader& blinnphongshader);
+
 //fireworks
 std::vector<std::pair<Firework*, bool>>fireworks;
-
-// 传递点光源给着色器
-void set_point_light(Shader& blinnphongshader)
-{
-    int count = 0;
-    string struct_string = "light_list[";
-    string color_string = "].Color";
-    string pos_string = "].Position";
-    string intensity_string = "].intensity";
-    for (int i = 0; i < fireworks.size(); i++)
-    {
-        if (fireworks[i].second == true && fireworks[i].first->isExploded() && fireworks[i].first->isAlive() == true)
-        {
-            blinnphongshader.setVec3(struct_string + to_string(count) + color_string, 1.0f, 1.0f, 1.0f);
-            blinnphongshader.setVec3(struct_string + to_string(count) + pos_string, 0.0f, 0.0f, 0.0f);
-            blinnphongshader.setFloat(struct_string + to_string(count) + intensity_string, 1.0f);
-            count++;
-        }
-    }
-    blinnphongshader.setInt("num_lights", count);
-}
 
 // settings
 //const unsigned int SCR_WIDTH = 1600;
@@ -80,9 +62,6 @@ irrklang::ISoundEngine* SoundEngine = irrklang::createIrrKlangDevice();
 
 //KEY BOARD STATUS
 bool PRESS[FIREWORK_TYPES] = { 0 };
-
-
-
 
 int main()
 {
@@ -129,12 +108,9 @@ int main()
     glEnable(GL_PROGRAM_POINT_SIZE);
     Shader particleShader("particle_test_vs.glsl", "particle_test_fs.glsl");
     Shader skyShader("skybox_test_vs.glsl", "skybox_text_fs.glsl");
-
-    // Blinn_Phong Shader
-    Shader lightingShader("Blinn_Phong_vs.glsl", "Blinn_Phong_fs.glsl");
-
     Shader BlurShader("Result.vs", "Blur.fs");
     Shader ResultShader("Result.vs", "Result.fs");
+    Shader CastleShader("model_shader_vs.glsl", "model_shader_fs.glsl");
 
     SkyBox sb;
 
@@ -148,17 +124,13 @@ int main()
     };
     sb.loadMap(boxes);
 
-    skyShader.use();
-    skyShader.setInt("skybox", 0);
-
     // 音频
     SoundEngine->play2D("./rise.wav", GL_FALSE);
     SoundEngine->play2D("./explosion.wav", GL_FALSE);
     SoundEngine->stopAllSounds();
 
     // 模型
-    Model ourModel("./Castle/Castle OBJ.obj");
-    Shader modelShader("model_shader_vs.glsl", "model_shader_fs.glsl");
+    Model castle("Castle/Castle OBJ2.obj");
 
    /* bigfirework fw(4.0f);
     fireworkParam fp;
@@ -167,8 +139,6 @@ int main()
     fp.tp.max_trail = 60;
     fp.tp.min_trail = 40;
     fw.init(fp);*/
-
-   
 
     /*groundfirework fw(4.0f);
     fireworkParam fp;
@@ -222,23 +192,26 @@ int main()
         }
 
         // model
-        // render the loaded model
-        modelShader.use();
-        modelShader.setMat4("projection", projection);
-        modelShader.setMat4("view", view);
-        glm::mat4 model = glm::mat4(1.0f);
-        model = glm::translate(model, glm::vec3(0.0f, -20.0f, 0.0f)); // translate it down so it's at the center of the scene
-        model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));	// it's a bit too big for our scene, so scale it down
-        model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-        modelShader.setMat4("model", model);
-        // 将烟花所有点光源传给着色器
-        set_point_light(modelShader);
-        ourModel.Draw(modelShader);
+        CastleShader.use();
+        CastleShader.setMat4("view", view);
+        CastleShader.setMat4("projection", projection);
+        glm::mat4 castleTransform = glm::mat4(1.0f);
+        castleTransform = glm::translate(castleTransform, glm::vec3(0.0f, -1.0f, 0.0f));
+        castleTransform = glm::scale(castleTransform, glm::vec3(0.01f, 0.01f, 0.01f));
+        castleTransform = glm::rotate(castleTransform, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        CastleShader.setMat4("model", castleTransform);
+        // 传递点光源给着色器
+        set_point_light(CastleShader);
+        // 渲染城堡模型
+        castle.Draw(CastleShader);
 
+        // skybox
         skyShader.use();
-        
+        skyShader.setInt("skybox", 0);
         skyShader.setMat4("view", view);
         skyShader.setMat4("projection", projection);
+        //skyShader.setVec3("viewPos", camera.Position);
+        //skyShader.setVec3("lightPos", 0.0f, 0.0f, 0.0f);
         sb.draw(skyShader);
 
         blur.blurTheFrame(BlurShader, ResultShader);
@@ -340,4 +313,26 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
     camera.ProcessMouseScroll(yoffset);
+}
+
+// 传递点光源给着色器
+void set_point_light(Shader& blinnphongshader)
+{
+    int count = 0;
+    string struct_string = "light_list[";
+    string color_string = "].Color";
+    string pos_string = "].Position";
+    string intensity_string = "].intensity";
+    for (int i = 0; i < fireworks.size(); i++)
+    {
+        if (fireworks[i].second == true && fireworks[i].first->isExploded() == true && fireworks[i].first->isAlive() == true)
+        {
+            Firework* ptr = fireworks[i].first;
+            blinnphongshader.setVec3(struct_string + to_string(count) + color_string, ptr->get_explode_color());
+            blinnphongshader.setVec3(struct_string + to_string(count) + pos_string, ptr->get_explode_position());
+            blinnphongshader.setFloat(struct_string + to_string(count) + intensity_string, 1.0f);
+            count++;
+        }
+    }
+    blinnphongshader.setInt("num_lights", count);
 }

@@ -66,7 +66,7 @@
 			[
 				{
 					"backtrace" : 4,
-					"path" : "C:/Users/zjnyl/Documents/GitHub/CG_Firework/includes"
+					"path" : "D:/computer_graphics/CG_Firework/includes"
 				}
 			],
 			"language" : "CXX",
@@ -93,7 +93,7 @@
 			[
 				{
 					"backtrace" : 4,
-					"path" : "C:/Users/zjnyl/Documents/GitHub/CG_Firework/includes"
+					"path" : "D:/computer_graphics/CG_Firework/includes"
 				}
 			],
 			"language" : "C",
@@ -124,7 +124,7 @@
 			},
 			{
 				"backtrace" : 2,
-				"fragment" : "-LIBPATH:C:\\Users\\zjnyl\\Documents\\GitHub\\CG_Firework\\lib",
+				"fragment" : "-LIBPATH:D:\\computer_graphics\\CG_Firework\\lib",
 				"role" : "libraryPath"
 			},
 			{

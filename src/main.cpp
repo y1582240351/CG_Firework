@@ -67,6 +67,8 @@ irrklang::ISoundEngine* SoundEngine = irrklang::createIrrKlangDevice();
 //KEY BOARD STATUS
 bool PRESS[FIREWORK_TYPES] = { 0 };
 
+//Firework param
+glm::fvec3 pos(0.0f, -1.5f, -1.0f);
 float explode_time = 4.0f;
 int first_trails_num = 300;
 int second_trails_num = 500;
@@ -188,16 +190,22 @@ int main()
 
         if (open_gui) {
             ImGui::Begin("Fire Work GUI!", &open_gui);               // Create a window called "Hello, world!" and append into it
-            ImGui::Text("Parameters of fireworks");               // Display some text (you can use a format strings too)
+            ImGui::Text("Fireworks initialization settings");               // Display some text (you can use a format strings too)
 
-            ImGui::SliderFloat("explode_time", &explode_time, 2.0f, 20.0f);
+            ImGui::SliderFloat("explode_time", &explode_time, 2.0f, 6.0f);
+            ImGui::SliderFloat("The x position", (float*)&pos.x, -2.0f, 0.0f);
+            ImGui::SliderFloat("The y position", (float*)&pos.y, -2.0f, 0.0f);
+            ImGui::SliderFloat("The z position", (float*)&pos.z, -2.0f, 0.0f);
+            
+            ImGui::Separator();
+
+            ImGui::Text("Parameters of fireworks");
             ImGui::SliderInt("first_trails_num", &first_trails_num, 60, 400);
             ImGui::SliderInt("second_trails_num", &second_trails_num, 60, 700);
             ImGui::SliderInt("explode_num", &explode_num, 0, 3);
             ImGui::SliderInt("max_trail", &max_trail, 30, first_trails_num);
             ImGui::SliderInt("min_trails", &min_trail, 30, first_trails_num);
 
-            //ImGui::ColorEdit3("clear_color", (float*)&clear_color);
             //ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
             ImGui::End();
         }
@@ -300,7 +308,7 @@ void processInput(GLFWwindow* window)
                 Firework* newFireWork = nullptr;
                 if (i == 0)
                 {
-                    newFireWork = new innerburstfirework(explode_time);
+                    newFireWork = new innerburstfirework(explode_time,pos);
 
                     fireworkParam fp;
                     fp.trails_num = first_trails_num;
@@ -311,7 +319,7 @@ void processInput(GLFWwindow* window)
                 }
                 else if (i==1)
                 {
-                    newFireWork = new bigfirework(explode_time);
+                    newFireWork = new bigfirework(explode_time,pos);
 
                     fireworkParam fp;
                     fp.trails_num = first_trails_num;

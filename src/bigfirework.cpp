@@ -13,14 +13,14 @@ bigfirework::~bigfirework() {
 
 }
 
-bigfirework::bigfirework(float explode_time) : time_cnt(0.0f), explode_time(explode_time), exploded(false) {
+bigfirework::bigfirework(float explode_time, glm::fvec3 pos) : time_cnt(0.0f), explode_time(explode_time), exploded(false) {
 	ptr p = std::make_shared<ParticleSystem>(5000, true);
 	Particle base;
-	base.position = glm::fvec3(0.0f, -1.5f, -1.0f);
+	base.position = pos;
 	base.color = glm::fvec4(1.0f, 1.0f, 1.0f, 1.0f);
 	base.velocity = glm::fvec3(0.0f, 0.450f, 0.0f);
 	base.size = 10.0f;
-	base.life = 4.0f;
+	base.life = explode_time;
 	GenParam param;
 	param.gen_rate = 300;
 	param.size = 1;

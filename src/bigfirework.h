@@ -10,7 +10,7 @@ private:
 public:
 	bigfirework();
 
-	bigfirework(float);
+	bigfirework(float, glm::fvec3);
 
 	~bigfirework();
 

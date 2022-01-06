@@ -4,7 +4,7 @@
 extern irrklang::ISoundEngine* SoundEngine;
 
 Firework::Firework() : time_cnt(0.0f), exploded(false) {
-
+	sound = false;
 }
 
 Firework::~Firework() {
@@ -26,7 +26,7 @@ Firework::Firework(float explode_time) : time_cnt(0.0f), explode_time(explode_ti
 	base.size = 10.0f;
 	base.life = 4.0f;
 	GenParam param;
-	param.gen_rate = 50;
+	param.gen_rate = 500;
 	param.size = 1;
 	param.size_rate = 0.0015;
 	param.vel_base_rate = 1.0;
@@ -37,6 +37,7 @@ Firework::Firework(float explode_time) : time_cnt(0.0f), explode_time(explode_ti
 	p->initTrailGen(base, param);
 	//ParticleSystem::setTexture("texture_img/light_PNG14431.png");
 	trails.push_back(p);
+	sound = false;
 }
 
 
@@ -78,7 +79,7 @@ void Firework::light(Shader& shader, float delta_time, int second_trails_num) {
 
 	time_cnt += delta_time;
 	if (time_cnt < explode_time) {
-		static bool sound = false;
+		
 		trails[0]->trailGen(delta_time, 0.85, 0.06);
 		trails[0]->draw(shader);
 		if (!sound) {
@@ -127,7 +128,7 @@ void Firework::genTrails() {
 		base.color = glm::fvec4(ColorRandom(), 1.0f);
 		base.velocity = 0.15f * sphereRandom();
 		base.size = 3.0f;
-		base.life = floatRandom(0.0, 6.0);
+		base.life = floatRandom(0.0, 4.0);
 		GenParam param;
 		param.gen_rate = 50;
 		param.size = 1;

@@ -349,7 +349,7 @@ void processInput(GLFWwindow* window)
                     newFireWork = new Firework(explode_time);
 
                     fireworkParam fp;
-                    fp.trails_num = first_trails_num/50;
+                    fp.trails_num = first_trails_num;
                     fp.explode_num = explode_num;
                     fp.tp.max_trail = max_trail;
                     fp.tp.min_trail = min_trail;

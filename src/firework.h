@@ -69,7 +69,7 @@ private:
 	fireworkParam fwp; // 烟花的参数
 	bool exploded;
 	bool canExplodeTwice;
-
+	bool sound;
 	glm::fvec3 explode_position;
 	glm::fvec4 explode_color;
 };

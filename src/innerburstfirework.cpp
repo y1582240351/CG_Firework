@@ -17,7 +17,7 @@ innerburstfirework::innerburstfirework(float explode_time) : time_cnt(0.0f), exp
 	//1
 	ptr p = std::make_shared<ParticleSystem>(5000, true);
 	Particle base;
-	base.position = glm::fvec3(0.0f, -1.5f, -1.0f);
+	base.position = glm::fvec3(floatRandom(-0.75, 0.75), -1.5f, -1.0f);
 	base.color = glm::fvec4(1.0f, 1.0f, 1.0f, 1.0f);
 	base.velocity = glm::fvec3(0.0f, 0.450f, 0.0f);
 	base.size = 10.0f;
@@ -34,6 +34,7 @@ innerburstfirework::innerburstfirework(float explode_time) : time_cnt(0.0f), exp
 	p->initTrailGen(base, param);
 	//ParticleSystem::setTexture("texture_img/light_PNG14431.png");
 	trails.push_back(p);
+	sound = false;
 }
 
 
@@ -75,7 +76,6 @@ void innerburstfirework::light(Shader& shader, float delta_time) {
 
 	time_cnt += delta_time;
 	if (time_cnt < explode_time) {
-		static bool sound = false;
 		trails[0]->trailGen(delta_time, 0.85, 0.06);
 		trails[0]->draw(shader);
 		if (!sound) {

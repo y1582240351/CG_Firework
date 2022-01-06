@@ -37,6 +37,7 @@ private:
 	bool canExplodeTwice;
 	glm::fvec3 explode_position;
 	glm::fvec4 explode_color;
+	bool sound;
 };
 
 

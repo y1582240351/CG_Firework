@@ -125,6 +125,14 @@ int main()
         std::string("./skybox/front.jpg"),
         std::string("./skybox/back.jpg"),
     };
+    /*std::vector<std::string> boxes{
+       std::string("./skybox/px.jpg"),
+       std::string("./skybox/nx.jpg"),
+       std::string("./skybox/py.jpg"),
+       std::string("./skybox/ny.jpg"),
+       std::string("./skybox/pz.jpg"),
+       std::string("./skybox/nz.jpg"),
+    };*/
     sb.loadMap(boxes);
 
     // “Ù∆µ

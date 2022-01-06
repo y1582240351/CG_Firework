@@ -1,5 +1,9 @@
 #define STB_IMAGE_IMPLEMENTATION
 
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl3.h"
+
 #include <stdlib.h>
 #include <iostream>
 #include <filesystem>
@@ -64,6 +68,18 @@ irrklang::ISoundEngine* SoundEngine = irrklang::createIrrKlangDevice();
 
 //KEY BOARD STATUS
 bool PRESS[FIREWORK_TYPES] = { 0 };
+
+//Firework param
+glm::fvec3 pos(0.0f, -1.5f, -1.0f);
+float explode_time = 4.0f;
+int first_trails_num = 300;
+int second_trails_num = 500;
+int explode_num = 0;
+int max_trail = 60;
+int min_trail = 40;
+
+// gui
+bool open_gui = true;
 
 int main()
 {
@@ -135,6 +151,16 @@ int main()
     };*/
     sb.loadMap(boxes);
 
+    /*skyShader.use();
+    skyShader.setInt("skybox", 0);*/
+
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    ImGui::StyleColorsDark();
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    ImGui_ImplOpenGL3_Init("#version 330");
+
     // ÒôÆµ
     SoundEngine->play2D("./rise.wav", GL_FALSE);
     SoundEngine->play2D("./explosion.wav", GL_FALSE);
@@ -168,6 +194,37 @@ int main()
         // -----
         processInput(window);
 
+        //IMGUI
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        if (open_gui) {
+            ImGui::Begin("Fire Work GUI!", &open_gui);               // Create a window called "Hello, world!" and append into it
+            ImGui::Text("Fireworks initialization settings");               // Display some text (you can use a format strings too)
+
+            ImGui::SliderFloat("explode_time", &explode_time, 2.0f, 6.0f);
+            ImGui::SliderFloat("The x position", (float*)&pos.x, -2.0f, 0.0f);
+            ImGui::SliderFloat("The y position", (float*)&pos.y, -2.0f, 0.0f);
+            ImGui::SliderFloat("The z position", (float*)&pos.z, -2.0f, 0.0f);
+            
+            ImGui::Separator();
+
+            ImGui::Text("Parameters of fireworks");
+            ImGui::SliderInt("first_trails_num", &first_trails_num, 60, 400);
+            ImGui::SliderInt("second_trails_num", &second_trails_num, 60, 700);
+            ImGui::SliderInt("explode_num", &explode_num, 0, 3);
+            ImGui::SliderInt("max_trail", &max_trail, 30, first_trails_num);
+            ImGui::SliderInt("min_trails", &min_trail, 30, first_trails_num);
+
+            //ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+            ImGui::End();
+        }
+
+        // tell GLFW to capture our mouse
+        if (open_gui) glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        else glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
         // render
         // ------
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
@@ -192,7 +249,7 @@ int main()
             {
                 if (fireworks[i].first->isAlive() == true)
                 {
-                    fireworks[i].first->light(particleShader, delta_time);
+                    fireworks[i].first->light(particleShader, delta_time,second_trails_num);
                 }
                 else
                 {
@@ -228,6 +285,8 @@ int main()
 
         blur.blurTheFrame(BlurShader, ResultShader);
 
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
@@ -235,6 +294,9 @@ int main()
     }
     //delete ps;
 
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
    
     glfwTerminate();
     return 0;
@@ -258,35 +320,36 @@ void processInput(GLFWwindow* window)
                 Firework* newFireWork = nullptr;
                 if (i == 0)
                 {
-                    newFireWork = new innerburstfirework(4.0f);
+                    newFireWork = new innerburstfirework(explode_time,pos);
 
                     fireworkParam fp;
-                    fp.trails_num = 300;
-                    fp.explode_num = 0;
-                    fp.tp.max_trail = 60;
-                    fp.tp.min_trail = 40;
+                    fp.trails_num = first_trails_num;
+                    fp.explode_num = explode_num;
+                    fp.tp.max_trail = max_trail;
+                    fp.tp.min_trail = min_trail;
                     newFireWork->init(fp);
                 }
                 else if (i==1)
                 {
-                    newFireWork = new bigfirework(4.0f);
+                    newFireWork = new bigfirework(explode_time,pos);
 
                     fireworkParam fp;
-                    fp.trails_num = 300;
-                    fp.explode_num = 0;
-                    fp.tp.max_trail = 60;
-                    fp.tp.min_trail = 40;
+                    fp.trails_num = first_trails_num;
+                    fp.explode_num = explode_num;
+                    fp.tp.max_trail = max_trail;
+                    fp.tp.min_trail = min_trail;
                     newFireWork->init(fp);
                 }
+                
                 else if (i == 2)
                 {
-                    newFireWork = new Firework(4.0f);
+                    newFireWork = new Firework(explode_time);
 
                     fireworkParam fp;
-                    fp.trails_num = 100;
-                    fp.explode_num = 0;
-                    fp.tp.max_trail = 60;
-                    fp.tp.min_trail = 40;
+                    fp.trails_num = first_trails_num/50;
+                    fp.explode_num = explode_num;
+                    fp.tp.max_trail = max_trail;
+                    fp.tp.min_trail = min_trail;
                     newFireWork->init(fp);
                 }
 

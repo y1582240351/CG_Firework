@@ -54,7 +54,7 @@ public:
 
 	virtual void init(fireworkParam fwp);
 
-	virtual void light(Shader& shder, float delta_time);
+	virtual void light(Shader& shder, float delta_time,int second_trails_num);
 
 	virtual bool isExploded();
 

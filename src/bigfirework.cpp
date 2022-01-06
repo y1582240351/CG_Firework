@@ -13,14 +13,14 @@ bigfirework::~bigfirework() {
 
 }
 
-bigfirework::bigfirework(float explode_time) : time_cnt(0.0f), explode_time(explode_time), exploded(false) {
+bigfirework::bigfirework(float explode_time, glm::fvec3 pos) : time_cnt(0.0f), explode_time(explode_time), exploded(false) {
 	ptr p = std::make_shared<ParticleSystem>(5000, true);
 	Particle base;
 	base.position = glm::fvec3(floatRandom(-0.75, 0.75), -1.5f, -1.0f);
 	base.color = glm::fvec4(1.0f, 1.0f, 1.0f, 3.0f);
 	base.velocity = glm::fvec3(0.0f, 0.450f, 0.0f);
 	base.size = 10.0f;
-	base.life = 4.0f;
+	base.life = explode_time;
 	GenParam param;
 	param.gen_rate = 300;
 	param.size = 1;
@@ -71,7 +71,7 @@ bool bigfirework::isAlive()
 /// </summary>
 /// <param name="shader">渲染所用的着色器</param>
 /// <param name="delta_time">每帧之间的间隔时间</param>
-void bigfirework::light(Shader& shader, float delta_time) {
+void bigfirework::light(Shader& shader, float delta_time, int second_trails_num) {
 
 	time_cnt += delta_time;
 	if (time_cnt < explode_time) {
@@ -102,7 +102,7 @@ void bigfirework::light(Shader& shader, float delta_time) {
 
 					if (chance > 0.9)
 					{
-						for (int j = 0; j < 100; ++j) {
+						for (int j = 0; j < second_trails_num/5; ++j) {
 							ptr p = std::make_shared<ParticleSystem>(50, false);
 							// 初始化生成的节点，参数可以改
 							Particle base;

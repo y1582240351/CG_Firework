@@ -10,7 +10,7 @@ private:
 public:
 	innerburstfirework();
 
-	innerburstfirework(float);
+	innerburstfirework(float, glm::fvec3);
 
 	~innerburstfirework();
 
@@ -20,7 +20,7 @@ public:
 
 	void init(fireworkParam fwp);
 
-	void light(Shader& shder, float delta_time);
+	void light(Shader& shder, float delta_time, int second_trails_num);
 
 	bool isExploded();
 

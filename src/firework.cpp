@@ -74,7 +74,7 @@ bool Firework::isAlive()
 /// </summary>
 /// <param name="shader">渲染所用的着色器</param>
 /// <param name="delta_time">每帧之间的间隔时间</param>
-void Firework::light(Shader& shader, float delta_time) {
+void Firework::light(Shader& shader, float delta_time, int second_trails_num) {
 
 	time_cnt += delta_time;
 	if (time_cnt < explode_time) {

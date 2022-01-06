@@ -13,7 +13,7 @@ innerburstfirework::~innerburstfirework() {
 
 }
 
-innerburstfirework::innerburstfirework(float explode_time) : time_cnt(0.0f), explode_time(explode_time), explodedOnce(false),  explodedTwice(false) {
+innerburstfirework::innerburstfirework(float explode_time, glm::fvec3 pos) : time_cnt(0.0f), explode_time(explode_time), explodedOnce(false),  explodedTwice(false) {
 	//1
 	ptr p = std::make_shared<ParticleSystem>(5000, true);
 	Particle base;
@@ -21,7 +21,7 @@ innerburstfirework::innerburstfirework(float explode_time) : time_cnt(0.0f), exp
 	base.color = glm::fvec4(1.0f, 1.0f, 1.0f, 1.0f);
 	base.velocity = glm::fvec3(0.0f, 0.450f, 0.0f);
 	base.size = 10.0f;
-	base.life = 4.0f;
+	base.life = explode_time;
 	GenParam param;
 	param.gen_rate = 300;
 	param.size = 1;
@@ -72,7 +72,7 @@ bool innerburstfirework::isAlive()
 /// </summary>
 /// <param name="shader">渲染所用的着色器</param>
 /// <param name="delta_time">每帧之间的间隔时间</param>
-void innerburstfirework::light(Shader& shader, float delta_time) {
+void innerburstfirework::light(Shader& shader, float delta_time, int second_trails_num) {
 
 	time_cnt += delta_time;
 	if (time_cnt < explode_time) {
@@ -99,7 +99,7 @@ void innerburstfirework::light(Shader& shader, float delta_time) {
 			{
 				std::cout << "gen" << std::endl;
 				explodedTwice = true;
-				for (int j = 0; j < 500; ++j) {
+				for (int j = 0; j < second_trails_num; ++j) {
 					ptr p = std::make_shared<ParticleSystem>(10000, false);
 					// 初始化生成的节点，参数可以改
 					Particle base;

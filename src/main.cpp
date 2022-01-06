@@ -55,6 +55,8 @@ Camera camera(glm::vec3(0.0f, 0.0f, 0.0f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
+bool MOUSEPRESS = false;                                                    
+bool MOUSEABLE = false;                                                    
 
 // timing
 float deltaTime = 0.0f;
@@ -275,6 +277,7 @@ int main()
         castle.Draw(CastleShader);
 
         // skybox
+        view = glm::mat4(glm::mat3(camera.GetViewMatrix()));
         skyShader.use();
         skyShader.setInt("skybox", 0);
         skyShader.setMat4("view", view);
@@ -372,6 +375,27 @@ void processInput(GLFWwindow* window)
         camera.ProcessKeyboard(LEFT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         camera.ProcessKeyboard(RIGHT, deltaTime);
+
+    // Êó±êµã»÷
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && MOUSEPRESS == false)
+    {
+        if (MOUSEABLE)
+        {
+            glfwSetCursorPosCallback(window, mouse_callback);
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+            MOUSEABLE = false;
+        }
+        else
+        {
+            firstMouse = true;
+            glfwSetCursorPosCallback(window, NULL);
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+            MOUSEABLE = true;
+        }
+        MOUSEPRESS = true;
+    }
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE)
+        MOUSEPRESS = false;
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
@@ -426,7 +450,7 @@ void set_point_light(Shader& blinnphongshader)
             Firework* ptr = fireworks[i].first;
             blinnphongshader.setVec3(struct_string + to_string(count) + color_string, ptr->get_explode_color());
             blinnphongshader.setVec3(struct_string + to_string(count) + pos_string, ptr->get_explode_position());
-            blinnphongshader.setFloat(struct_string + to_string(count) + intensity_string, 1.0f);
+            blinnphongshader.setFloat(struct_string + to_string(count) + intensity_string, 0.7f);
             count++;
         }
     }

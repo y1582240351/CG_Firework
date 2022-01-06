@@ -49,14 +49,14 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "CG-Firework::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-CG-Firework-Debug-350b1c0b93b271101da6.json",
+					"jsonFile" : "target-CG-Firework-Debug-ef7c1970146995f095cf.json",
 					"name" : "CG-Firework",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-ZERO_CHECK-Debug-85253376d45cd0dca835.json",
+					"jsonFile" : "target-ZERO_CHECK-Debug-3c54a971027b11f85a7d.json",
 					"name" : "ZERO_CHECK",
 					"projectIndex" : 0
 				}
@@ -110,14 +110,14 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "CG-Firework::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-CG-Firework-Release-636b56ac09a8adba5785.json",
+					"jsonFile" : "target-CG-Firework-Release-be60a20b4c8ae98fc53e.json",
 					"name" : "CG-Firework",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-ZERO_CHECK-Release-85253376d45cd0dca835.json",
+					"jsonFile" : "target-ZERO_CHECK-Release-3c54a971027b11f85a7d.json",
 					"name" : "ZERO_CHECK",
 					"projectIndex" : 0
 				}
@@ -171,14 +171,14 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "CG-Firework::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-CG-Firework-MinSizeRel-767074dcf9b825be9f42.json",
+					"jsonFile" : "target-CG-Firework-MinSizeRel-c1f75f1876e10e8a444e.json",
 					"name" : "CG-Firework",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-ZERO_CHECK-MinSizeRel-85253376d45cd0dca835.json",
+					"jsonFile" : "target-ZERO_CHECK-MinSizeRel-3c54a971027b11f85a7d.json",
 					"name" : "ZERO_CHECK",
 					"projectIndex" : 0
 				}
@@ -232,14 +232,14 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "CG-Firework::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-CG-Firework-RelWithDebInfo-200bbdcb1a73684c3603.json",
+					"jsonFile" : "target-CG-Firework-RelWithDebInfo-c8ef272089a31e309e7b.json",
 					"name" : "CG-Firework",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-ZERO_CHECK-RelWithDebInfo-85253376d45cd0dca835.json",
+					"jsonFile" : "target-ZERO_CHECK-RelWithDebInfo-3c54a971027b11f85a7d.json",
 					"name" : "ZERO_CHECK",
 					"projectIndex" : 0
 				}
@@ -249,8 +249,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "D:/onedrive2/OneDrive - mail2.sysu.edu.cn/Firework/CG_Firework/build",
-		"source" : "D:/onedrive2/OneDrive - mail2.sysu.edu.cn/Firework/CG_Firework"
+		"build" : "D:/computer_graphics/CG_Firework/build",
+		"source" : "D:/computer_graphics/CG_Firework"
 	},
 	"version" : 
 	{

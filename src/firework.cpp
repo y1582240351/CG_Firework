@@ -113,7 +113,9 @@ void Firework::light(Shader& shader, float delta_time) {
 /// 生成烟花炸开时产生的流苏
 /// </summary>
 void Firework::genTrails() {
+	explode_color = trails[0]->get_color();
 	glm::fvec3 explode_pos = trails[0]->posTrail();
+	explode_position = explode_pos;
 	trails.resize(fwp.trails_num);
 	//ParticleSystem::setTexture("texture_img/light_PNG14431.png");
 	for (int i = 0; i < fwp.trails_num; ++i) {

@@ -44,7 +44,7 @@ private:
 public:
 	Firework();
 
-	Firework(float);
+	Firework(float,glm::fvec3,bool);
 
 	~Firework();
 

@@ -13,13 +13,17 @@ bigfirework::~bigfirework() {
 
 }
 
-bigfirework::bigfirework(float explode_time, glm::fvec3 pos) : time_cnt(0.0f), explode_time(explode_time), exploded(false) {
+bigfirework::bigfirework(float explode_time, glm::fvec3 pos, bool option) : time_cnt(0.0f), explode_time(explode_time), exploded(false) {
 
 	//ptr p = std::make_shared<ParticleSystem>(5000, true);
-	
+
 	ptr p = std::make_shared<ParticleSystem>(5000, true);
 	Particle base;
-	base.position = glm::fvec3(floatRandom(-0.75, 0.75), -1.5f, -1.0f);
+	if (option) {
+		base.position = pos;
+	}
+	else base.position = glm::fvec3(floatRandom(-0.75, 0.75), pos.y, -1.0f);;
+
 	base.color = glm::fvec4(1.0f, 1.0f, 1.0f, 3.0f);
 	base.velocity = glm::fvec3(0.0f, 0.450f, 0.0f);
 	base.size = 10.0f;
@@ -35,8 +39,27 @@ bigfirework::bigfirework(float explode_time, glm::fvec3 pos) : time_cnt(0.0f), e
 	param.life_rate[1] = 0.9;
 	p->initTrailGen(base, param);
 
+
+
+	Particle base1;
+	base1.position = glm::fvec3(floatRandom(-0.75, 0.75), -1.5f, -1.0f);
+	base1.color = glm::fvec4(1.0f, 1.0f, 1.0f, 3.0f);
+	base1.velocity = glm::fvec3(0.0f, 0.0f, 0.0f);
+	base1.size = 10.0f;
+	base1.life = explode_time;
+	GenParam param1;
+	param1.gen_rate = 300;
+	param1.size = 1;
+	param1.size_rate = 0.0015;
+	param1.vel_base_rate = 1.0;
+	param1.vel_random_rate = 0.005;
+	param1.delay = 1;
+	param1.life_rate[0] = 0.8;
+	param1.life_rate[1] = 0.9;
+
+
 	this->dummy = std::make_shared<ParticleSystem>(10, true);
-	this->dummy->initTrailGen(base, param);
+	this->dummy->initTrailGen(base1, param1);
 
 
 	//ParticleSystem::setTexture("texture_img/light_PNG14431.png");

@@ -76,6 +76,7 @@ int second_trails_num = 500;
 int explode_num = 0;
 int max_trail = 60;
 int min_trail = 40;
+bool option = false;
 
 // gui
 bool open_gui = true;
@@ -133,12 +134,12 @@ int main()
     SkyBox sb;
 
     std::vector<std::string> boxes{
-        std::string("./skybox/right.jpg"),
-        std::string("./skybox/left.jpg"),
-        std::string("./skybox/top.jpg"),
-        std::string("./skybox/bottom.jpg"),
-        std::string("./skybox/front.jpg"),
-        std::string("./skybox/back.jpg"),
+        std::string("./skybox/starfield_rt.tga"),
+        std::string("./skybox/starfield_rt.tga"),
+        std::string("./skybox/starfield_rt.tga"),
+        std::string("./skybox/starfield_dn.tga"),
+        std::string("./skybox/starfield_ft.tga"),
+        std::string("./skybox/starfield_rt.tga"),
     };
     /*std::vector<std::string> boxes{
        std::string("./skybox/px.jpg"),
@@ -203,10 +204,11 @@ int main()
             ImGui::Text("Fireworks initialization settings");               // Display some text (you can use a format strings too)
 
             ImGui::SliderFloat("explode_time", &explode_time, 2.0f, 6.0f);
-            ImGui::SliderFloat("The x position", (float*)&pos.x, -2.0f, 0.0f);
-            ImGui::SliderFloat("The y position", (float*)&pos.y, -2.0f, 0.0f);
-            ImGui::SliderFloat("The z position", (float*)&pos.z, -2.0f, 0.0f);
-            
+            ImGui::Checkbox("use the follow postion", &option);
+            ImGui::SliderFloat("The x position", (float*)&pos.x, -1.0f, 1.0f);
+            ImGui::SliderFloat("The y position", (float*)&pos.y, -2.0f, 1.0f);
+            ImGui::SliderFloat("The z position", (float*)&pos.z, -1.0f, 1.0f);
+            //ImGui::SliderFloat("The y position", &ypos, -2.0f, 0.0f);
             ImGui::Separator();
 
             ImGui::Text("Parameters of fireworks");
@@ -264,12 +266,12 @@ int main()
         CastleShader.setMat4("view", view);
         CastleShader.setMat4("projection", projection);
         glm::mat4 castleTransform = glm::mat4(1.0f);
-        castleTransform = glm::translate(castleTransform, glm::vec3(0.0f, -1.0f, 0.0f));
+        castleTransform = glm::translate(castleTransform, glm::vec3(0.0f, -2.0f, 0.0f));
         castleTransform = glm::scale(castleTransform, glm::vec3(0.01f, 0.01f, 0.01f));
         castleTransform = glm::rotate(castleTransform, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         CastleShader.setMat4("model", castleTransform);
         CastleShader.setVec3("viewPos", camera.Position);
-        // 将所有点光源传递给着色器
+        // 将所有点光源传递给模型渲染着色器
         int lights_num = 0;
         for (int i = 0; i < fireworks.size(); i++)
         {
@@ -287,13 +289,26 @@ int main()
 
         // skybox
         view = glm::mat4(glm::mat3(camera.GetViewMatrix()));
+        // view = camera.GetViewMatrix();
         skyShader.use();
         skyShader.setInt("skybox", 0);
         skyShader.setMat4("view", view);
         skyShader.setMat4("projection", projection);
-        //skyShader.setVec3("viewPos", camera.Position);
-        //skyShader.setVec3("lightPos", 0.0f, 0.0f, 0.0f);
-        //sb.draw(skyShader);
+        skyShader.setVec3("viewPos", camera.Position);
+        // 将所有点光源传递给天空盒渲染着色器
+        lights_num = 0;
+        for (int i = 0; i < fireworks.size(); i++)
+        {
+            if (fireworks[i].second == true && fireworks[i].first->isExploded() == true && fireworks[i].first->isAlive() == true)
+            {
+                skyShader.setVec3("lights_position[" + to_string(lights_num) + "]", fireworks[i].first->get_explode_position());
+                skyShader.setVec3("lights_color[" + to_string(lights_num) + "]", fireworks[i].first->get_explode_color());
+                lights_num++;
+            }
+        }
+        skyShader.setFloat("intensity", 1.0);
+        skyShader.setInt("lights_num", lights_num);
+        sb.draw(skyShader);
 
         blur.blurTheFrame(BlurShader, ResultShader);
 
@@ -332,7 +347,7 @@ void processInput(GLFWwindow* window)
                 Firework* newFireWork = nullptr;
                 if (i == 0)
                 {
-                    newFireWork = new innerburstfirework(explode_time,pos);
+                    newFireWork = new innerburstfirework(explode_time,pos,option);
 
                     fireworkParam fp;
                     fp.trails_num = first_trails_num;
@@ -343,7 +358,7 @@ void processInput(GLFWwindow* window)
                 }
                 else if (i==1)
                 {
-                    newFireWork = new bigfirework(explode_time,pos);
+                    newFireWork = new bigfirework(explode_time,pos,option);
 
                     fireworkParam fp;
                     fp.trails_num = first_trails_num;
@@ -355,7 +370,7 @@ void processInput(GLFWwindow* window)
                 
                 else if (i == 2)
                 {
-                    newFireWork = new Firework(explode_time);
+                    newFireWork = new Firework(explode_time,pos,option);
 
                     fireworkParam fp;
                     fp.trails_num = first_trails_num;

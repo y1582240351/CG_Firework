@@ -13,14 +13,18 @@ Firework::~Firework() {
 
 }
 
-Firework::Firework(float explode_time) : time_cnt(0.0f), explode_time(explode_time), exploded(false){
+Firework::Firework(float explode_time, glm::fvec3 pos,bool option) : time_cnt(0.0f), explode_time(explode_time), exploded(false){
 	ptr p = std::make_shared<ParticleSystem>(100, true);
 	Particle base;
 
 	auto posx = floatRandom(-1.0f, 1.0f);
 	auto posz = floatRandom(-1.0f, 1.0f);
 
-	base.position = glm::fvec3(posx, -1.0f, posz);
+	if (option) {
+		base.position = pos;
+	}
+	else base.position = glm::fvec3(posx, pos.y, posz);
+
 	base.color = glm::fvec4(1.0f, 1.0f, 1.0f, 1.0f);
 	base.velocity = glm::fvec3(0.0f, 0.450f, 0.0f);
 	base.size = 10.0f;

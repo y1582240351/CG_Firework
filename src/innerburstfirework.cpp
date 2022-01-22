@@ -13,11 +13,16 @@ innerburstfirework::~innerburstfirework() {
 
 }
 
-innerburstfirework::innerburstfirework(float explode_time, glm::fvec3 pos) : time_cnt(0.0f), explode_time(explode_time), explodedOnce(false),  explodedTwice(false) {
+innerburstfirework::innerburstfirework(float explode_time, glm::fvec3 pos,bool option) : time_cnt(0.0f), explode_time(explode_time), explodedOnce(false),  explodedTwice(false) {
 	//1
 	ptr p = std::make_shared<ParticleSystem>(5000, true);
 	Particle base;
-	base.position = glm::fvec3(floatRandom(-0.75, 0.75), -1.5f, -1.0f);
+
+	if (option) {
+		base.position = pos;
+	}
+	else base.position = glm::fvec3(floatRandom(-0.75, 0.75), pos.y, -1.0f);
+
 	base.color = glm::fvec4(1.0f, 1.0f, 1.0f, 1.0f);
 	base.velocity = glm::fvec3(0.0f, 0.450f, 0.0f);
 	base.size = 10.0f;

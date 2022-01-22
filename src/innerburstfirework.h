@@ -10,7 +10,7 @@ private:
 public:
 	innerburstfirework();
 
-	innerburstfirework(float, glm::fvec3);
+	innerburstfirework(float, glm::fvec3,bool);
 
 	~innerburstfirework();
 

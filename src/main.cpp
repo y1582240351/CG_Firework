@@ -22,7 +22,8 @@
 #include "utility_tool.h"
 #include "firework.h"
 #include "bigfirework.h"
-
+#include "BlinBlinFirework.h"
+#include "ABundleOfFirework.h"
 #include "innerburstfirework.h"
 #include "skybox.h"
 #include "model.h"
@@ -45,10 +46,10 @@ std::vector<std::pair<Firework*, bool>>fireworks;
 // settings
 //const unsigned int SCR_WIDTH = 1600;
 //const unsigned int SCR_HEIGHT = 900;
-const unsigned int FIREWORK_TYPES = 3;
+const unsigned int FIREWORK_TYPES = 6;
 const unsigned int FIREWORK_LIMITATIONS = 50;
 // camera
-Camera camera(glm::vec3(0.0f, 0.0f, 0.0f));
+Camera camera(glm::vec3(0.0f, -1.75f, -2.5f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -359,7 +360,7 @@ void processInput(GLFWwindow* window)
                 }
                 else if (i==1)
                 {
-                    newFireWork = new bigfirework(explode_time,pos,option);
+                    newFireWork = new bigfirework(explode_time,pos,option, true);
 
                     fireworkParam fp;
                     fp.trails_num = first_trails_num;
@@ -368,7 +369,6 @@ void processInput(GLFWwindow* window)
                     fp.tp.min_trail = min_trail;
                     newFireWork->init(fp);
                 }
-                
                 else if (i == 2)
                 {
                     newFireWork = new Firework(explode_time,pos,option);
@@ -380,7 +380,39 @@ void processInput(GLFWwindow* window)
                     fp.tp.min_trail = min_trail;
                     newFireWork->init(fp);
                 }
+                else if (i == 3)
+                {
+                    newFireWork = new bigfirework(explode_time, pos, option, false);
 
+                    fireworkParam fp;
+                    fp.trails_num = first_trails_num;
+                    fp.explode_num = explode_num;
+                    fp.tp.max_trail = max_trail;
+                    fp.tp.min_trail = min_trail;
+                    newFireWork->init(fp);
+                }
+                else if (i == 4)
+                {
+                    newFireWork = new BlinBlinFirework(explode_time, pos, option);
+
+                    fireworkParam fp;
+                    fp.trails_num = first_trails_num;
+                    fp.explode_num = explode_num;
+                    fp.tp.max_trail = max_trail;
+                    fp.tp.min_trail = min_trail;
+                    newFireWork->init(fp);
+                }
+                else if (i == 5)
+                {
+                    newFireWork = new ABundleOfFirework(explode_time, pos, option);
+
+                    fireworkParam fp;
+                    fp.trails_num = first_trails_num;
+                    fp.explode_num = explode_num;
+                    fp.tp.max_trail = max_trail;
+                    fp.tp.min_trail = min_trail;
+                    newFireWork->init(fp);
+                }
                 
 
                 fireworks.push_back(make_pair(newFireWork, true));

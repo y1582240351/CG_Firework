@@ -13,9 +13,11 @@ bigfirework::~bigfirework() {
 
 }
 
-bigfirework::bigfirework(float explode_time, glm::fvec3 pos, bool option) : time_cnt(0.0f), explode_time(explode_time), exploded(false) {
+bigfirework::bigfirework(float explode_time, glm::fvec3 pos, bool option, bool _randomcolor) : time_cnt(0.0f), explode_time(explode_time), exploded(false) {
 
 	this->exist = 1.0f;
+	this->randomcolor = _randomcolor;
+	
 
 	ptr p = std::make_shared<ParticleSystem>(5000, true);
 	Particle base;
@@ -139,7 +141,22 @@ void bigfirework::light(Shader& shader, float delta_time, int second_trails_num)
 							Particle base;
 							base.position = trails[i]->getHeadParticlePos();
 							//base.color = glm::fvec4(0.1f, 0.4f, 0.3f, 1.0f);
-							base.color = glm::fvec4(ColorRandom(), 1.0f);
+							if (this->randomcolor)
+							{
+								base.color = glm::fvec4(ColorRandom(), 3.0f);
+							}
+							else
+							{
+								auto chance = floatRandom(0.0, 1.0);
+								if (chance > 0.0)
+								{
+									base.color = glm::fvec4(ColorRandom(), 3.0f);
+								}
+								else
+								{
+									base.color = glm::fvec4(0.98f, 0.98f, 0.82f, 1.0f);
+								}
+							}
 							this->explode_color = this->explode_color * (this->exist / (this->exist + 1.0f)) + base.color * (1 / (this->exist + 1.0f));
 							this->exist += 1.0f;
 							base.velocity = 0.15f * sphereRandom();
@@ -192,7 +209,15 @@ void bigfirework::genTrails() {
 		Particle base;
 		base.position = explode_pos;
 		//base.color = glm::fvec4(0.1f, 0.4f, 0.3f, 1.0f);
-		base.color = glm::fvec4(ColorRandom(), 3.0f);
+		if (this->randomcolor)
+		{
+			base.color = glm::fvec4(ColorRandom(), 3.0f);
+		}
+		else
+		{
+			base.color = glm::fvec4(0.98f, 0.98f, 0.82f, 1.0f);
+		}
+		
 		
 		this->explode_color = this->explode_color * (this->exist / (this->exist + 1.0f)) + base.color * (1 / (this->exist + 1.0f));
 		this->exist += 1.0f;

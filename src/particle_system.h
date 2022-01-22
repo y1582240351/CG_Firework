@@ -88,6 +88,8 @@ public:
 
     void initTrailGen(Particle& base_particle, GenParam& param);
 
+    void ParticleSystem::set_color(glm::fvec4 color);
+
     glm::fvec4 get_color();
 
 private:

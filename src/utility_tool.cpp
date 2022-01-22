@@ -50,6 +50,24 @@ glm::fvec3 sphereRandom() {
 }
 
 
+glm::fvec3 bundleRandom() {
+	/*float x = normalRandom(0.0f, 1.0f);
+	float y = normalRandom(1.0f, 1.0f);
+	float z = normalRandom(0.0f, 1.0f);
+
+	return glm::fvec3(x,1.0f,z);*/
+
+	float phi = floatRandom(0.0f, 2 * PI);
+	//float costheta = floatRandom(-1, 1);
+	//float theta = acos(costheta);
+	float theta = floatRandom(-PI / 6, PI/6);
+	return glm::fvec3(sin(theta) * cos(phi) * 1.5, cos(theta) * 3.0, sin(theta) * sin(phi) * 1.5);
+
+}
+
+
+
+
 
 glm::fvec3 posRandom(glm::fvec3& origin_pos, float radius) {
 	glm::fvec3 pos = origin_pos;

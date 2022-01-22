@@ -41,11 +41,12 @@ void main()
     }
     vec3 lighting_result = lighting + color * 0.2;
 
-    // 辉光效果
-    float brightness = dot(lighting_result, vec3(0.2126, 0.7152, 0.0722));
-    if(brightness > 1.0)
-        BrightColor = vec4(lighting_result, 1.0);
-    else
-        BrightColor = vec4(0.1, 0.1, 0.1, 1.0);
+    // 模型不会发光，因此不需要使用高斯模糊实现泛光
+    // float brightness = dot(lighting_result, vec3(0.2126, 0.7152, 0.0722));
+    // if(brightness > 1.0)
+    //     BrightColor = vec4(lighting_result, 1.0);
+    // else
+    //     BrightColor = vec4(0.1, 0.1, 0.1, 1.0);
+    BrightColor = vec4(0.13, 0.13, 0.13, 1.0);
     FragColor = vec4(lighting_result, 1.0);
 }

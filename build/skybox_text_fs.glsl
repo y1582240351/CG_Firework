@@ -45,9 +45,11 @@ uniform samplerCube skybox;
 void main()
 {    
     FragColor = texture(skybox, TexCoords);
-    float brightness = dot(FragColor.rgb,vec3(0.2126,0.7152,0.0722));
-    if(brightness > 0.1)
-        BrightColor = FragColor;
-    else
-        BrightColor = vec4(0.1, 0.1, 0.1, 1.0);;
+    // 天空盒不会发光，因此不需要使用高斯模糊实现泛光
+    // float brightness = dot(FragColor.rgb,vec3(0.2126,0.7152,0.0722));
+    // if(brightness > 0.1)
+    //     BrightColor = FragColor;
+    // else
+    //     BrightColor = vec4(0.1, 0.1, 0.1, 1.0);
+    BrightColor = vec4(0.13, 0.13, 0.13, 1.0);
 }

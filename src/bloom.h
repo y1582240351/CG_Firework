@@ -19,32 +19,29 @@
 #include "particle_system.h"
 #include "utility_tool.h"
 
+#define DEFAULT 0
+#define GAUSS 1
+
+// 窗口大小
+//const unsigned int SCR_WIDTH = 1600;
+//const unsigned int SCR_HEIGHT = 900;
+
 class Bloom {
-private:
-	GLuint configFBO; // 原图所用的帧缓冲
-	GLuint blurFBO[2]; // 滤波时所用的帧缓冲
-	GLuint color_buffer[2]; // 绑定到原图的颜色附件
-	GLuint blur_buffer[2]; // 滤波时所用的颜色附件
-	GLuint rbo_depth; // 原图渲染时所用的深度缓冲
-	GLuint vao, vbo; // 滤波所用的帧缓冲对应的vao
-	unsigned int attachments[2] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1 };
-
-	const unsigned int SCR_WIDTH;
-	const unsigned int SCR_HEIGHT;
-
-	void initQuad(); //  初始化滤波所用的四边形框
-
 public:
-	Bloom(int, int);  // 初始化默认的帧缓冲（FrameBuffer）
+	Bloom(unsigned int height, unsigned int width);
 	~Bloom();
 
-	void initBlurFB(); // 初始化滤波所用的帧缓冲
+	void bindDefaultFBO();
 
-	void activateConfigFB(); // 激活默认帧缓冲
+	void GaussBlur(Shader &blurShader);
 
-	void blur(Shader& blur_shader); // 进行高斯滤波
+	void RanderToScreen(Shader& screenShader);
 
-	void finalShade(Shader& final_shader); // 调用最终的渲染
+private:
+	GLuint defaultFBO, GaussFBO[2];
+	GLuint defaultColorBuffer[2], GaussColorBuffer[2];
+	GLuint RBO;
+	GLuint VAO, VBO, EBO;
 };
 
 

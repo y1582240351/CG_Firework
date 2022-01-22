@@ -1,34 +1,34 @@
-#include "innerburstfirework.h"
+#include "ABundleOfFirework.h"
 
 // sound
 extern irrklang::ISoundEngine* SoundEngine;
 
-innerburstfirework::innerburstfirework() : time_cnt(0.0f), explodedOnce(false), explodedTwice(false){
+ABundleOfFirework::ABundleOfFirework() : time_cnt(0.0f), explodedOnce(false), explodedTwice(false) {
 
 }
 
-innerburstfirework::~innerburstfirework() {
+ABundleOfFirework::~ABundleOfFirework() {
 
 	std::cout << "revoke" << std::endl;
 
 }
 
-innerburstfirework::innerburstfirework(float explode_time, glm::fvec3 pos,bool option) : time_cnt(0.0f), explode_time(explode_time), explodedOnce(false),  explodedTwice(false) {
+ABundleOfFirework::ABundleOfFirework(float explode_time, glm::fvec3 pos, bool option) : time_cnt(0.0f), explode_time(explode_time), explodedOnce(false), explodedTwice(false) {
 	//1
-	ptr p = std::make_shared<ParticleSystem>(5000, true);
+	ptr p = std::make_shared<ParticleSystem>(1, true);
 	Particle base;
 
 	if (option) {
 		base.position = pos;
 	}
-	else base.position = glm::fvec3(floatRandom(-0.75, 0.75), pos.y, -1.0f);
+	else base.position = glm::fvec3(0.0f, -2.0f, 0.5f);
 
 	base.color = glm::fvec4(1.0f, 1.0f, 1.0f, 1.0f);
 	this->explode_color = this->explode_color * (this->exist / (this->exist + 1.0f)) + base.color * (1 / (this->exist + 1.0f));
 	this->exist += 1.0f;
 	base.velocity = glm::fvec3(0.0f, 0.450f, 0.0f);
 	base.size = 10.0f;
-	base.life = explode_time;
+	base.life = 0.01f;
 	GenParam param;
 	param.gen_rate = 300;
 	param.size = 1;
@@ -49,18 +49,18 @@ innerburstfirework::innerburstfirework(float explode_time, glm::fvec3 pos,bool o
 /// 初始化烟花数据
 /// </summary>
 /// <param name="base_fwp">烟花初始数据</param>
-void innerburstfirework::init(fireworkParam base_fwp) {
+void ABundleOfFirework::init(fireworkParam base_fwp) {
 	fwp = base_fwp;
 	// ...其他要用到的参数
 }
 
 
-void innerburstfirework::destroy()
+void ABundleOfFirework::destroy()
 {
 	trails.clear();
 }
 
-bool innerburstfirework::isAlive()
+bool ABundleOfFirework::isAlive()
 {
 	bool flag = 0;
 	for (int i = 0; i < trails.size(); ++i)
@@ -79,10 +79,10 @@ bool innerburstfirework::isAlive()
 /// </summary>
 /// <param name="shader">渲染所用的着色器</param>
 /// <param name="delta_time">每帧之间的间隔时间</param>
-void innerburstfirework::light(Shader& shader, float delta_time, int second_trails_num) {
+void ABundleOfFirework::light(Shader& shader, float delta_time, int second_trails_num) {
 
 	time_cnt += delta_time;
-	if (time_cnt < explode_time) {
+	if (time_cnt < 0.01) {
 		trails[0]->trailGen(delta_time, 0.85, 0.06);
 		trails[0]->draw(shader);
 		if (!sound) {
@@ -104,32 +104,32 @@ void innerburstfirework::light(Shader& shader, float delta_time, int second_trai
 
 			if (trails[1]->testLife(5.0f) == true && !explodedTwice)
 			{
-				std::cout << "gen" << std::endl;
-				explodedTwice = true;
-				for (int j = 0; j < second_trails_num; ++j) {
-					ptr p = std::make_shared<ParticleSystem>(10000, false);
-					// 初始化生成的节点，参数可以改
-					Particle base;
-					base.position = explodePosition;
-					//base.color = glm::fvec4(0.1f, 0.4f, 0.3f, 1.0f);
-					base.color = glm::fvec4(0.98f, 0.98f, 0.82f, 1.0f);
-					this->explode_color = this->explode_color * (this->exist / (this->exist + 1.0f)) + base.color * (1 / (this->exist + 1.0f));
-					this->exist += 1.0f;
-					base.velocity = 0.15f * sphereRandom();
-					base.size = 1.0f;
-					base.life = 2.0f;
-					GenParam param;
-					param.gen_rate = 150;
-					param.size = 1;
-					param.size_rate = 0.001;
-					param.vel_base_rate = 1.0;
-					param.vel_random_rate = 0.0000;
-					param.delay = 1;
-					param.life_rate[0] = 0.6;
-					param.life_rate[1] = 0.7;
-					p->initTrailGen(base, param);
-					trails.push_back(p);
-				}
+				//std::cout << "gen" << std::endl;
+				//explodedTwice = true;
+				//for (int j = 0; j < second_trails_num; ++j) {
+				//	ptr p = std::make_shared<ParticleSystem>(10000, false);
+				//	// 初始化生成的节点，参数可以改
+				//	Particle base;
+				//	base.position = explodePosition;
+				//	//base.color = glm::fvec4(0.1f, 0.4f, 0.3f, 1.0f);
+				//	base.color = glm::fvec4(0.98f, 0.98f, 0.82f, 1.0f);
+				//	this->explode_color = this->explode_color * (this->exist / (this->exist + 1.0f)) + base.color * (1 / (this->exist + 1.0f));
+				//	this->exist += 1.0f;
+				//	base.velocity = 0.15f * sphereRandom();
+				//	base.size = 1.0f;
+				//	base.life = 2.0f;
+				//	GenParam param;
+				//	param.gen_rate = 150;
+				//	param.size = 1;
+				//	param.size_rate = 0.001;
+				//	param.vel_base_rate = 1.0;
+				//	param.vel_random_rate = 0.0000;
+				//	param.delay = 1;
+				//	param.life_rate[0] = 0.6;
+				//	param.life_rate[1] = 0.7;
+				//	p->initTrailGen(base, param);
+				//	trails.push_back(p);
+				//}
 			}
 			//if (trails[i]->isDied()) // 不再渲染死亡的粒子团
 			//{
@@ -145,10 +145,11 @@ void innerburstfirework::light(Shader& shader, float delta_time, int second_trai
 /// <summary>
 /// 生成烟花炸开时产生的流苏
 /// </summary>
-void innerburstfirework::genTrails() {
+void ABundleOfFirework::genTrails() {
 	explode_color = trails[0]->get_color();
 	glm::fvec3 explode_pos = trails[0]->posTrail();
-	trails.resize(fwp.trails_num+1);
+	fwp.trails_num /= 5;
+	trails.resize(fwp.trails_num + 1);
 	//ParticleSystem::setTexture("texture_img/light_PNG14431.png");
 	for (int i = 1; i <= fwp.trails_num; ++i) {
 		ptr p = std::make_shared<ParticleSystem>(10000, true);
@@ -159,7 +160,7 @@ void innerburstfirework::genTrails() {
 		base.color = glm::fvec4(ColorRandom(), 1.0f);
 		this->explode_color = this->explode_color * (this->exist / (this->exist + 1.0f)) + base.color * (1 / (this->exist + 1.0f));
 		this->exist += 1.0f;
-		base.velocity = 0.15f * sphereRandom();
+		base.velocity = 0.15f * bundleRandom();
 		base.size = 3.0f;
 		base.life = 6.0;
 		GenParam param;
@@ -176,15 +177,15 @@ void innerburstfirework::genTrails() {
 	}
 }
 
-bool innerburstfirework::isExploded() {
-	return explodedOnce;
+bool ABundleOfFirework::isExploded() {
+	return explodedTwice;
 }
 
-glm::fvec3 innerburstfirework::get_explode_position() {
+glm::fvec3 ABundleOfFirework::get_explode_position() {
 	return explodePosition;
 }
 
-glm::fvec4 innerburstfirework::get_explode_color() {
+glm::fvec4 ABundleOfFirework::get_explode_color() {
 	explode_color[0] = std::floor(explode_color[0] * 255.f) / 255;
 	explode_color[1] = std::floor(explode_color[1] * 255.f) / 255;
 	explode_color[2] = std::floor(explode_color[2] * 255.f) / 255;

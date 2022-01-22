@@ -1,19 +1,19 @@
-#include "innerburstfirework.h"
+#include "BlinBlinFirework.h"
 
 // sound
 extern irrklang::ISoundEngine* SoundEngine;
 
-innerburstfirework::innerburstfirework() : time_cnt(0.0f), explodedOnce(false), explodedTwice(false){
+BlinBlinFirework::BlinBlinFirework() : time_cnt(0.0f), explodedOnce(false), explodedTwice(false) {
 
 }
 
-innerburstfirework::~innerburstfirework() {
+BlinBlinFirework::~BlinBlinFirework() {
 
 	std::cout << "revoke" << std::endl;
 
 }
 
-innerburstfirework::innerburstfirework(float explode_time, glm::fvec3 pos,bool option) : time_cnt(0.0f), explode_time(explode_time), explodedOnce(false),  explodedTwice(false) {
+BlinBlinFirework::BlinBlinFirework(float explode_time, glm::fvec3 pos, bool option) : time_cnt(0.0f), explode_time(explode_time), explodedOnce(false), explodedTwice(false) {
 	//1
 	ptr p = std::make_shared<ParticleSystem>(5000, true);
 	Particle base;
@@ -41,6 +41,7 @@ innerburstfirework::innerburstfirework(float explode_time, glm::fvec3 pos,bool o
 	p->initTrailGen(base, param);
 	//ParticleSystem::setTexture("texture_img/light_PNG14431.png");
 	trails.push_back(p);
+	store.push_back(base.color);
 	sound = false;
 }
 
@@ -49,18 +50,18 @@ innerburstfirework::innerburstfirework(float explode_time, glm::fvec3 pos,bool o
 /// 初始化烟花数据
 /// </summary>
 /// <param name="base_fwp">烟花初始数据</param>
-void innerburstfirework::init(fireworkParam base_fwp) {
+void BlinBlinFirework::init(fireworkParam base_fwp) {
 	fwp = base_fwp;
 	// ...其他要用到的参数
 }
 
 
-void innerburstfirework::destroy()
+void BlinBlinFirework::destroy()
 {
 	trails.clear();
 }
 
-bool innerburstfirework::isAlive()
+bool BlinBlinFirework::isAlive()
 {
 	bool flag = 0;
 	for (int i = 0; i < trails.size(); ++i)
@@ -79,7 +80,7 @@ bool innerburstfirework::isAlive()
 /// </summary>
 /// <param name="shader">渲染所用的着色器</param>
 /// <param name="delta_time">每帧之间的间隔时间</param>
-void innerburstfirework::light(Shader& shader, float delta_time, int second_trails_num) {
+void BlinBlinFirework::light(Shader& shader, float delta_time, int second_trails_num) {
 
 	time_cnt += delta_time;
 	if (time_cnt < explode_time) {
@@ -102,7 +103,7 @@ void innerburstfirework::light(Shader& shader, float delta_time, int second_trai
 		//fwp.trails_num
 		for (int i = 0; i < trails.size(); ++i) {
 
-			if (trails[1]->testLife(5.0f) == true && !explodedTwice)
+			if (trails[1]->testLife(2.0f) == true && !explodedTwice)
 			{
 				std::cout << "gen" << std::endl;
 				explodedTwice = true;
@@ -116,10 +117,10 @@ void innerburstfirework::light(Shader& shader, float delta_time, int second_trai
 					this->explode_color = this->explode_color * (this->exist / (this->exist + 1.0f)) + base.color * (1 / (this->exist + 1.0f));
 					this->exist += 1.0f;
 					base.velocity = 0.15f * sphereRandom();
-					base.size = 1.0f;
+					base.size = 3.0f;
 					base.life = 2.0f;
 					GenParam param;
-					param.gen_rate = 150;
+					param.gen_rate = 0;
 					param.size = 1;
 					param.size_rate = 0.001;
 					param.vel_base_rate = 1.0;
@@ -129,12 +130,17 @@ void innerburstfirework::light(Shader& shader, float delta_time, int second_trai
 					param.life_rate[1] = 0.7;
 					p->initTrailGen(base, param);
 					trails.push_back(p);
+					store.push_back(base.color);
 				}
 			}
 			//if (trails[i]->isDied()) // 不再渲染死亡的粒子团
 			//{
 			//	continue;
 			//}
+			if(floatRandom(0.0f, 1.0f)>0.5f)
+				trails[i]->set_color(glm::fvec4(0.0f, 0.0f, 0.0f, 0.0f));
+			else
+				trails[i]->set_color(store[i]);
 			trails[i]->trailGen(delta_time, 0.7, 0.07);
 			trails[i]->draw(shader);
 		}
@@ -145,10 +151,11 @@ void innerburstfirework::light(Shader& shader, float delta_time, int second_trai
 /// <summary>
 /// 生成烟花炸开时产生的流苏
 /// </summary>
-void innerburstfirework::genTrails() {
+void BlinBlinFirework::genTrails() {
 	explode_color = trails[0]->get_color();
 	glm::fvec3 explode_pos = trails[0]->posTrail();
-	trails.resize(fwp.trails_num+1);
+	trails.resize(fwp.trails_num + 1);
+	store.resize(fwp.trails_num + 1);
 	//ParticleSystem::setTexture("texture_img/light_PNG14431.png");
 	for (int i = 1; i <= fwp.trails_num; ++i) {
 		ptr p = std::make_shared<ParticleSystem>(10000, true);
@@ -161,9 +168,9 @@ void innerburstfirework::genTrails() {
 		this->exist += 1.0f;
 		base.velocity = 0.15f * sphereRandom();
 		base.size = 3.0f;
-		base.life = 6.0;
+		base.life = 3.0;
 		GenParam param;
-		param.gen_rate = 150;
+		param.gen_rate = 0;
 		param.size = 1;
 		param.size_rate = 0.001;
 		param.vel_base_rate = 1.0;
@@ -173,18 +180,19 @@ void innerburstfirework::genTrails() {
 		param.life_rate[1] = 0.7;
 		p->initTrailGen(base, param);
 		trails[i] = p;
+		store[i]=base.color;
 	}
 }
 
-bool innerburstfirework::isExploded() {
+bool BlinBlinFirework::isExploded() {
 	return explodedOnce;
 }
 
-glm::fvec3 innerburstfirework::get_explode_position() {
+glm::fvec3 BlinBlinFirework::get_explode_position() {
 	return explodePosition;
 }
 
-glm::fvec4 innerburstfirework::get_explode_color() {
+glm::fvec4 BlinBlinFirework::get_explode_color() {
 	explode_color[0] = std::floor(explode_color[0] * 255.f) / 255;
 	explode_color[1] = std::floor(explode_color[1] * 255.f) / 255;
 	explode_color[2] = std::floor(explode_color[2] * 255.f) / 255;

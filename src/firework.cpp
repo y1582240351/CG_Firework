@@ -13,15 +13,21 @@ Firework::~Firework() {
 
 }
 
-Firework::Firework(float explode_time) : time_cnt(0.0f), explode_time(explode_time), exploded(false){
+Firework::Firework(float explode_time, glm::fvec3 pos,bool option) : time_cnt(0.0f), explode_time(explode_time), exploded(false){
 	ptr p = std::make_shared<ParticleSystem>(100, true);
 	Particle base;
 
 	auto posx = floatRandom(-1.0f, 1.0f);
 	auto posz = floatRandom(-1.0f, 1.0f);
 
-	base.position = glm::fvec3(posx, -1.0f, posz);
+	if (option) {
+		base.position = pos;
+	}
+	else base.position = glm::fvec3(posx, pos.y, posz);
+
 	base.color = glm::fvec4(1.0f, 1.0f, 1.0f, 1.0f);
+	this->explode_color = this->explode_color * (this->exist / (this->exist + 1.0f)) + base.color * (1 / (this->exist + 1.0f));
+	this->exist += 1.0f;
 	base.velocity = glm::fvec3(0.0f, 0.450f, 0.0f);
 	base.size = 10.0f;
 	base.life = 4.0f;
@@ -126,11 +132,13 @@ void Firework::genTrails() {
 		base.position = explode_pos;
 		//base.color = glm::fvec4(0.1f, 0.4f, 0.3f, 1.0f);
 		base.color = glm::fvec4(ColorRandom(), 1.0f);
+		this->explode_color = this->explode_color * (this->exist / (this->exist + 1.0f)) + base.color * (1 / (this->exist + 1.0f));
+		this->exist += 1.0f;
 		base.velocity = 0.15f * sphereRandom();
 		base.size = 3.0f;
 		base.life = floatRandom(0.0, 4.0);
 		GenParam param;
-		param.gen_rate = 50;
+		param.gen_rate = 300;
 		param.size = 1;
 		param.size_rate = 0.001;
 		param.vel_base_rate = 1.0;
@@ -153,5 +161,9 @@ glm::fvec3 Firework::get_explode_position() {
 }
 
 glm::fvec4 Firework::get_explode_color() {
+	explode_color[0] = std::floor(explode_color[0] * 255.f) / 255;
+	explode_color[1] = std::floor(explode_color[1] * 255.f) / 255;
+	explode_color[2] = std::floor(explode_color[2] * 255.f) / 255;
+	explode_color[3] = 3.0f;
 	return explode_color;
 }

@@ -6,7 +6,6 @@
 			[
 				{
 					"build" : ".",
-					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.0"
@@ -43,29 +42,21 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "ALL_BUILD::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-ALL_BUILD-Debug-1549e6d8e79f30c1cc01.json",
+					"jsonFile" : "target-ALL_BUILD-Debug-28c1428a5ba6d8151ae3.json",
 					"name" : "ALL_BUILD",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "CG-Firework::@6890427a1f51a3e7e1df",
-<<<<<<< HEAD:build/.cmake/api/v1/reply/codemodel-v2-046a1a32c66a0ba93b5d.json
-					"jsonFile" : "target-CG-Firework-Debug-8cf6a0b8114bc1454528.json",
-=======
-					"jsonFile" : "target-CG-Firework-Debug-76c0558526ebade8e8b9.json",
->>>>>>> 2e02a8a24d6de2dcc30c60cce92621d22a8e1fb9:build/.cmake/api/v1/reply/codemodel-v2-584c9e0f9248f8c1f5ec.json
+					"jsonFile" : "target-CG-Firework-Debug-b6cd5e0e81e666a7e791.json",
 					"name" : "CG-Firework",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df",
-<<<<<<< HEAD:build/.cmake/api/v1/reply/codemodel-v2-046a1a32c66a0ba93b5d.json
 					"jsonFile" : "target-ZERO_CHECK-Debug-14cae7833142179f3418.json",
-=======
-					"jsonFile" : "target-ZERO_CHECK-Debug-eeaec8304de7b51ebbc6.json",
->>>>>>> 2e02a8a24d6de2dcc30c60cce92621d22a8e1fb9:build/.cmake/api/v1/reply/codemodel-v2-584c9e0f9248f8c1f5ec.json
 					"name" : "ZERO_CHECK",
 					"projectIndex" : 0
 				}
@@ -76,7 +67,6 @@
 			[
 				{
 					"build" : ".",
-					"jsonFile" : "directory-.-Release-d0094a50bb2071803777.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.0"
@@ -113,29 +103,21 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "ALL_BUILD::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-ALL_BUILD-Release-1549e6d8e79f30c1cc01.json",
+					"jsonFile" : "target-ALL_BUILD-Release-28c1428a5ba6d8151ae3.json",
 					"name" : "ALL_BUILD",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "CG-Firework::@6890427a1f51a3e7e1df",
-<<<<<<< HEAD:build/.cmake/api/v1/reply/codemodel-v2-046a1a32c66a0ba93b5d.json
-					"jsonFile" : "target-CG-Firework-Release-92402e29e07e11e601eb.json",
-=======
-					"jsonFile" : "target-CG-Firework-Release-d6cc2205b29e6d68c864.json",
->>>>>>> 2e02a8a24d6de2dcc30c60cce92621d22a8e1fb9:build/.cmake/api/v1/reply/codemodel-v2-584c9e0f9248f8c1f5ec.json
+					"jsonFile" : "target-CG-Firework-Release-9cb452590856243adbeb.json",
 					"name" : "CG-Firework",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df",
-<<<<<<< HEAD:build/.cmake/api/v1/reply/codemodel-v2-046a1a32c66a0ba93b5d.json
 					"jsonFile" : "target-ZERO_CHECK-Release-14cae7833142179f3418.json",
-=======
-					"jsonFile" : "target-ZERO_CHECK-Release-eeaec8304de7b51ebbc6.json",
->>>>>>> 2e02a8a24d6de2dcc30c60cce92621d22a8e1fb9:build/.cmake/api/v1/reply/codemodel-v2-584c9e0f9248f8c1f5ec.json
 					"name" : "ZERO_CHECK",
 					"projectIndex" : 0
 				}
@@ -146,7 +128,6 @@
 			[
 				{
 					"build" : ".",
-					"jsonFile" : "directory-.-MinSizeRel-d0094a50bb2071803777.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.0"
@@ -183,29 +164,21 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "ALL_BUILD::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-ALL_BUILD-MinSizeRel-1549e6d8e79f30c1cc01.json",
+					"jsonFile" : "target-ALL_BUILD-MinSizeRel-28c1428a5ba6d8151ae3.json",
 					"name" : "ALL_BUILD",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "CG-Firework::@6890427a1f51a3e7e1df",
-<<<<<<< HEAD:build/.cmake/api/v1/reply/codemodel-v2-046a1a32c66a0ba93b5d.json
-					"jsonFile" : "target-CG-Firework-MinSizeRel-2bef14c47cf8cf78c023.json",
-=======
-					"jsonFile" : "target-CG-Firework-MinSizeRel-3afdd17c988013373923.json",
->>>>>>> 2e02a8a24d6de2dcc30c60cce92621d22a8e1fb9:build/.cmake/api/v1/reply/codemodel-v2-584c9e0f9248f8c1f5ec.json
+					"jsonFile" : "target-CG-Firework-MinSizeRel-5d716589a9471dd26d26.json",
 					"name" : "CG-Firework",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df",
-<<<<<<< HEAD:build/.cmake/api/v1/reply/codemodel-v2-046a1a32c66a0ba93b5d.json
 					"jsonFile" : "target-ZERO_CHECK-MinSizeRel-14cae7833142179f3418.json",
-=======
-					"jsonFile" : "target-ZERO_CHECK-MinSizeRel-eeaec8304de7b51ebbc6.json",
->>>>>>> 2e02a8a24d6de2dcc30c60cce92621d22a8e1fb9:build/.cmake/api/v1/reply/codemodel-v2-584c9e0f9248f8c1f5ec.json
 					"name" : "ZERO_CHECK",
 					"projectIndex" : 0
 				}
@@ -216,7 +189,6 @@
 			[
 				{
 					"build" : ".",
-					"jsonFile" : "directory-.-RelWithDebInfo-d0094a50bb2071803777.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.0"
@@ -253,29 +225,21 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "ALL_BUILD::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-ALL_BUILD-RelWithDebInfo-1549e6d8e79f30c1cc01.json",
+					"jsonFile" : "target-ALL_BUILD-RelWithDebInfo-28c1428a5ba6d8151ae3.json",
 					"name" : "ALL_BUILD",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "CG-Firework::@6890427a1f51a3e7e1df",
-<<<<<<< HEAD:build/.cmake/api/v1/reply/codemodel-v2-046a1a32c66a0ba93b5d.json
-					"jsonFile" : "target-CG-Firework-RelWithDebInfo-9d07f6c9008e77a6ca59.json",
-=======
-					"jsonFile" : "target-CG-Firework-RelWithDebInfo-7fe76e8e3790a1811f97.json",
->>>>>>> 2e02a8a24d6de2dcc30c60cce92621d22a8e1fb9:build/.cmake/api/v1/reply/codemodel-v2-584c9e0f9248f8c1f5ec.json
+					"jsonFile" : "target-CG-Firework-RelWithDebInfo-1175bbcf05f7f5545cd8.json",
 					"name" : "CG-Firework",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "ZERO_CHECK::@6890427a1f51a3e7e1df",
-<<<<<<< HEAD:build/.cmake/api/v1/reply/codemodel-v2-046a1a32c66a0ba93b5d.json
 					"jsonFile" : "target-ZERO_CHECK-RelWithDebInfo-14cae7833142179f3418.json",
-=======
-					"jsonFile" : "target-ZERO_CHECK-RelWithDebInfo-eeaec8304de7b51ebbc6.json",
->>>>>>> 2e02a8a24d6de2dcc30c60cce92621d22a8e1fb9:build/.cmake/api/v1/reply/codemodel-v2-584c9e0f9248f8c1f5ec.json
 					"name" : "ZERO_CHECK",
 					"projectIndex" : 0
 				}
@@ -285,17 +249,12 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-<<<<<<< HEAD:build/.cmake/api/v1/reply/codemodel-v2-046a1a32c66a0ba93b5d.json
 		"build" : "D:/final_computer_graphics/CG_Firework/build",
 		"source" : "D:/final_computer_graphics/CG_Firework"
-=======
-		"build" : "C:/Users/dell/Desktop/CG_Project/CG_Firework/build",
-		"source" : "C:/Users/dell/Desktop/CG_Project/CG_Firework"
->>>>>>> 2e02a8a24d6de2dcc30c60cce92621d22a8e1fb9:build/.cmake/api/v1/reply/codemodel-v2-584c9e0f9248f8c1f5ec.json
 	},
 	"version" : 
 	{
 		"major" : 2,
-		"minor" : 3
+		"minor" : 2
 	}
 }

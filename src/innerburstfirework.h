@@ -10,7 +10,7 @@ private:
 public:
 	innerburstfirework();
 
-	innerburstfirework(float, glm::fvec3);
+	innerburstfirework(float, glm::fvec3,bool);
 
 	~innerburstfirework();
 
@@ -29,6 +29,7 @@ public:
 	glm::fvec4 get_explode_color();
 
 private:
+	float exist;
 	std::vector<ptr> trails;	// 产生拖尾的粒子团，第0个是释放时的主粒子
 	std::vector<ptr> explosions; // 产生爆炸效果的粒子团
 	float time_cnt, explode_time; // 计时器以及要爆炸的时间

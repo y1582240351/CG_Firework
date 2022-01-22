@@ -16,7 +16,8 @@ void main() {
 
 	outColor = v_color;
 
-    float brightness = dot(outColor.rgb,vec3(0.2126,0.7152,0.0722));
+    // float brightness = dot(outColor.rgb,vec3(0.2126,0.7152,0.0722));
+	// 每一个烟花粒子都是发光体，都需要模糊实现泛光
 	BrightColor = outColor;
     // if(brightness > 0.1)
     //     BrightColor = outColor;

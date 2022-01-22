@@ -70,6 +70,9 @@ float timer();
 glm::fvec3 sphereRandom();
 
 
+glm::fvec3 bundleRandom();
+
+
 /// <summary>
 /// 在以origin_pos为球心，radius为半径进行随机采样
 /// </summary>

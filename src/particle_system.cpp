@@ -419,6 +419,10 @@ void ParticleSystem::genParticles(float delta_time, float mu, float sigma) {
 	vel = particles[0].velocity;
 }
 
+void ParticleSystem::set_color(glm::fvec4 color) {
+	particles[0].color = color;
+}
+
 glm::fvec4 ParticleSystem::get_color() {
 	return particles[0].color;
 }

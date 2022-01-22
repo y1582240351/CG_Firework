@@ -24,6 +24,8 @@ innerburstfirework::innerburstfirework(float explode_time, glm::fvec3 pos,bool o
 	else base.position = glm::fvec3(floatRandom(-0.75, 0.75), pos.y, -1.0f);
 
 	base.color = glm::fvec4(1.0f, 1.0f, 1.0f, 1.0f);
+	this->explode_color = this->explode_color * (this->exist / (this->exist + 1.0f)) + base.color * (1 / (this->exist + 1.0f));
+	this->exist += 1.0f;
 	base.velocity = glm::fvec3(0.0f, 0.450f, 0.0f);
 	base.size = 10.0f;
 	base.life = explode_time;
@@ -111,6 +113,8 @@ void innerburstfirework::light(Shader& shader, float delta_time, int second_trai
 					base.position = explodePosition;
 					//base.color = glm::fvec4(0.1f, 0.4f, 0.3f, 1.0f);
 					base.color = glm::fvec4(0.98f, 0.98f, 0.82f, 1.0f);
+					this->explode_color = this->explode_color * (this->exist / (this->exist + 1.0f)) + base.color * (1 / (this->exist + 1.0f));
+					this->exist += 1.0f;
 					base.velocity = 0.15f * sphereRandom();
 					base.size = 1.0f;
 					base.life = 2.0f;
@@ -153,6 +157,8 @@ void innerburstfirework::genTrails() {
 		base.position = explode_pos;
 		//base.color = glm::fvec4(0.1f, 0.4f, 0.3f, 1.0f);
 		base.color = glm::fvec4(ColorRandom(), 1.0f);
+		this->explode_color = this->explode_color * (this->exist / (this->exist + 1.0f)) + base.color * (1 / (this->exist + 1.0f));
+		this->exist += 1.0f;
 		base.velocity = 0.15f * sphereRandom();
 		base.size = 3.0f;
 		base.life = 6.0;
@@ -179,5 +185,9 @@ glm::fvec3 innerburstfirework::get_explode_position() {
 }
 
 glm::fvec4 innerburstfirework::get_explode_color() {
+	explode_color[0] = std::floor(explode_color[0] * 255.f) / 255;
+	explode_color[1] = std::floor(explode_color[1] * 255.f) / 255;
+	explode_color[2] = std::floor(explode_color[2] * 255.f) / 255;
+	explode_color[3] = 3.0f;
 	return explode_color;
 }

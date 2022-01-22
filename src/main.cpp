@@ -133,7 +133,7 @@ int main()
 
     SkyBox sb;
 
-    std::vector<std::string> boxes{
+    std::vector<std::string> boxes {
         std::string("./skybox/starfield_rt.tga"),
         std::string("./skybox/starfield_rt.tga"),
         std::string("./skybox/starfield_rt.tga"),
@@ -282,7 +282,7 @@ int main()
                 lights_num++;
             }
         }
-        CastleShader.setFloat("intensity", 0.4);
+        CastleShader.setFloat("intensity", 0.4f);
         CastleShader.setInt("lights_num", lights_num);
         // äÖÈ¾³Ç±¤Ä£ĞÍ
         castle.Draw(CastleShader);
@@ -308,6 +308,7 @@ int main()
         }
         skyShader.setFloat("intensity", 1.0);
         skyShader.setInt("lights_num", lights_num);
+        // äÖÈ¾Ìì¿ÕºĞ
         sb.draw(skyShader);
 
         blur.blurTheFrame(BlurShader, ResultShader);

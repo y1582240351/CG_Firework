@@ -14,6 +14,9 @@ bigfirework::~bigfirework() {
 }
 
 bigfirework::bigfirework(float explode_time, glm::fvec3 pos) : time_cnt(0.0f), explode_time(explode_time), exploded(false) {
+
+	//ptr p = std::make_shared<ParticleSystem>(5000, true);
+	
 	ptr p = std::make_shared<ParticleSystem>(5000, true);
 	Particle base;
 	base.position = glm::fvec3(floatRandom(-0.75, 0.75), -1.5f, -1.0f);
@@ -31,6 +34,11 @@ bigfirework::bigfirework(float explode_time, glm::fvec3 pos) : time_cnt(0.0f), e
 	param.life_rate[0] = 0.8;
 	param.life_rate[1] = 0.9;
 	p->initTrailGen(base, param);
+
+	this->dummy = std::make_shared<ParticleSystem>(10, true);
+	this->dummy->initTrailGen(base, param);
+
+
 	//ParticleSystem::setTexture("texture_img/light_PNG14431.png");
 	trails.push_back(p);
 	sound = false;
@@ -125,11 +133,13 @@ void bigfirework::light(Shader& shader, float delta_time, int second_trails_num)
 							trails.push_back(p);
 						}
 					}
-					trails[i]->youCanDie();
+					
+					//trails[i]->youCanDie();
 				}
+				trails[i] = this->dummy;
 				/*trails[i] = trails[trails.size() - 1];
 				trails.pop_back();*/
-				trails[i]->youCanDie();
+				//trails[i]->youCanDie();
 			}
 			else
 			{

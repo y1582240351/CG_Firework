@@ -122,10 +122,10 @@ void innerburstfirework::light(Shader& shader, float delta_time, int second_trai
 					trails.push_back(p);
 				}
 			}
-			if (trails[i]->isDied()) // 不再渲染死亡的粒子团
-			{
-				continue;
-			}
+			//if (trails[i]->isDied()) // 不再渲染死亡的粒子团
+			//{
+			//	continue;
+			//}
 			trails[i]->trailGen(delta_time, 0.7, 0.07);
 			trails[i]->draw(shader);
 		}

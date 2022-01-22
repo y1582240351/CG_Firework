@@ -293,7 +293,7 @@ int main()
         skyShader.setMat4("projection", projection);
         //skyShader.setVec3("viewPos", camera.Position);
         //skyShader.setVec3("lightPos", 0.0f, 0.0f, 0.0f);
-        sb.draw(skyShader);
+        //sb.draw(skyShader);
 
         blur.blurTheFrame(BlurShader, ResultShader);
 

@@ -49,7 +49,7 @@ std::vector<std::pair<Firework*, bool>>fireworks;
 const unsigned int FIREWORK_TYPES = 6;
 const unsigned int FIREWORK_LIMITATIONS = 50;
 // camera
-Camera camera(glm::vec3(0.0f, -1.75f, -2.5f));
+Camera camera(glm::vec3(0.1f, -0.6f, 1.8f));
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -268,7 +268,7 @@ int main()
         CastleShader.setMat4("projection", projection);
         glm::mat4 castleTransform = glm::mat4(1.0f);
         castleTransform = glm::translate(castleTransform, glm::vec3(0.0f, -2.0f, 0.0f));
-        castleTransform = glm::scale(castleTransform, glm::vec3(0.01f, 0.01f, 0.01f));
+        castleTransform = glm::scale(castleTransform, glm::vec3(0.05f, 0.05f, 0.05f));
         castleTransform = glm::rotate(castleTransform, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         CastleShader.setMat4("model", castleTransform);
         CastleShader.setVec3("viewPos", camera.Position);
@@ -283,7 +283,7 @@ int main()
                 lights_num++;
             }
         }
-        CastleShader.setFloat("intensity", 0.4f);
+        CastleShader.setFloat("intensity", 1.0f);
         CastleShader.setInt("lights_num", lights_num);
         // äÖÈ¾³Ç±¤Ä£ÐÍ
         castle.Draw(CastleShader);
@@ -307,7 +307,7 @@ int main()
                 lights_num++;
             }
         }
-        skyShader.setFloat("intensity", 1.0);
+        skyShader.setFloat("intensity", 1.0f);
         skyShader.setInt("lights_num", lights_num);
         // äÖÈ¾Ìì¿ÕºÐ
         sb.draw(skyShader);

@@ -39,9 +39,6 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow* window);
 
-// 传递点光源给着色器
-void set_point_light(Shader& blinnphongshader);
-
 //fireworks
 std::vector<std::pair<Firework*, bool>>fireworks;
 
@@ -271,8 +268,20 @@ int main()
         castleTransform = glm::scale(castleTransform, glm::vec3(0.01f, 0.01f, 0.01f));
         castleTransform = glm::rotate(castleTransform, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
         CastleShader.setMat4("model", castleTransform);
-        // 传递点光源给着色器
-        set_point_light(CastleShader);
+        CastleShader.setVec3("viewPos", camera.Position);
+        // 将所有点光源传递给着色器
+        int lights_num = 0;
+        for (int i = 0; i < fireworks.size(); i++)
+        {
+            if (fireworks[i].second == true && fireworks[i].first->isExploded() == true && fireworks[i].first->isAlive() == true)
+            {
+                CastleShader.setVec3("lights_position[" + to_string(lights_num) + "]", fireworks[i].first->get_explode_position());
+                CastleShader.setVec3("lights_color[" + to_string(lights_num) + "]", fireworks[i].first->get_explode_color());
+                lights_num++;
+            }
+        }
+        CastleShader.setFloat("intensity", 0.4);
+        CastleShader.setInt("lights_num", lights_num);
         // 渲染城堡模型
         castle.Draw(CastleShader);
 
@@ -433,26 +442,4 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
     camera.ProcessMouseScroll(yoffset);
-}
-
-// 传递点光源给着色器
-void set_point_light(Shader& blinnphongshader)
-{
-    int count = 0;
-    string struct_string = "light_list[";
-    string color_string = "].Color";
-    string pos_string = "].Position";
-    string intensity_string = "].intensity";
-    for (int i = 0; i < fireworks.size(); i++)
-    {
-        if (fireworks[i].second == true && fireworks[i].first->isExploded() == true && fireworks[i].first->isAlive() == true)
-        {
-            Firework* ptr = fireworks[i].first;
-            blinnphongshader.setVec3(struct_string + to_string(count) + color_string, ptr->get_explode_color());
-            blinnphongshader.setVec3(struct_string + to_string(count) + pos_string, ptr->get_explode_position());
-            blinnphongshader.setFloat(struct_string + to_string(count) + intensity_string, 0.7f);
-            count++;
-        }
-    }
-    blinnphongshader.setInt("num_lights", count);
 }

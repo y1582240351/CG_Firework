@@ -1,4 +1,3 @@
-// Blinn Phong Vertex Shader
 #version 330 core
 
 layout (location = 0) in vec3 aPos;
@@ -11,17 +10,14 @@ out VS_OUT {
     vec2 TexCoords;
 } vs_out;
 
-uniform mat4 model;
-uniform mat4 view;
 uniform mat4 projection;
+uniform mat4 view;
+uniform mat4 model;
 
 void main()
 {
     vs_out.FragPos = vec3(model * vec4(aPos, 1.0));   
+    vs_out.Normal = normalize(transpose(inverse(mat3(model))) * aNormal);
     vs_out.TexCoords = aTexCoords;
-
-    mat3 normalMatrix = transpose(inverse(mat3(model)));
-    vs_out.Normal = normalize(normalMatrix * aNormal);
-
 	gl_Position = projection * view * model * vec4(aPos, 1.0);
 }

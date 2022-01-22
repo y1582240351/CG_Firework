@@ -11,7 +11,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "D:/computer_graphics/CG_Firework/includes"
+			"value" : "D:/final_computer_graphics/CG_Firework/includes"
 		},
 		{
 			"name" : "ASSIMP_LIBRARY",
@@ -23,7 +23,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "D:/computer_graphics/CG_Firework/lib/assimp.lib"
+			"value" : "D:/final_computer_graphics/CG_Firework/lib/assimp.lib"
 		},
 		{
 			"name" : "CG-Firework_BINARY_DIR",
@@ -35,7 +35,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "D:/computer_graphics/CG_Firework/build"
+			"value" : "D:/final_computer_graphics/CG_Firework/build"
 		},
 		{
 			"name" : "CG-Firework_SOURCE_DIR",
@@ -47,7 +47,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "D:/computer_graphics/CG_Firework"
+			"value" : "D:/final_computer_graphics/CG_Firework"
 		},
 		{
 			"name" : "CMAKE_AR",
@@ -71,7 +71,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "d:/computer_graphics/CG_Firework/build"
+			"value" : "d:/final_computer_graphics/CG_Firework/build"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -511,7 +511,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "D:/computer_graphics/CG_Firework"
+			"value" : "D:/final_computer_graphics/CG_Firework"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -1035,7 +1035,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "[D:/computer_graphics/CG_Firework/lib/glfw3.lib][D:/computer_graphics/CG_Firework/includes][v()]"
+			"value" : "[D:/final_computer_graphics/CG_Firework/lib/glfw3.lib][D:/final_computer_graphics/CG_Firework/includes][v()]"
 		},
 		{
 			"name" : "FIND_PACKAGE_MESSAGE_DETAILS_GLM",
@@ -1047,7 +1047,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "[D:/computer_graphics/CG_Firework/includes][v()]"
+			"value" : "[D:/final_computer_graphics/CG_Firework/includes][v()]"
 		},
 		{
 			"name" : "GLFW3_INCLUDE_DIR",
@@ -1059,7 +1059,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "D:/computer_graphics/CG_Firework/includes"
+			"value" : "D:/final_computer_graphics/CG_Firework/includes"
 		},
 		{
 			"name" : "GLFW3_LIBRARY",
@@ -1071,7 +1071,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "D:/computer_graphics/CG_Firework/lib/glfw3.lib"
+			"value" : "D:/final_computer_graphics/CG_Firework/lib/glfw3.lib"
 		},
 		{
 			"name" : "GLM_INCLUDE_DIR",
@@ -1083,7 +1083,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "D:/computer_graphics/CG_Firework/includes"
+			"value" : "D:/final_computer_graphics/CG_Firework/includes"
 		}
 	],
 	"kind" : "cache",

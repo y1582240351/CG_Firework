@@ -310,7 +310,7 @@ int main()
                 lights_num++;
             }
         }
-        skyShader.setFloat("intensity", 1.0f);
+        skyShader.setFloat("intensity", 2.0f);
         skyShader.setInt("lights_num", lights_num);
         // äÖÈ¾Ìì¿ÕºĞ
         sb.draw(skyShader);

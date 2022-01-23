@@ -27,7 +27,7 @@
 #include "innerburstfirework.h"
 #include "skybox.h"
 #include "model.h"
-#include "blur.h"
+//#include "blur.h"
 
 #include "bloom.h"
 
@@ -44,8 +44,8 @@ void processInput(GLFWwindow* window);
 std::vector<std::pair<Firework*, bool>>fireworks;
 
 // settings
-//const unsigned int SCR_WIDTH = 1600;
-//const unsigned int SCR_HEIGHT = 900;
+const unsigned int SCR_WIDTH = 1600;
+const unsigned int SCR_HEIGHT = 900;
 const unsigned int FIREWORK_TYPES = 6;
 const unsigned int FIREWORK_LIMITATIONS = 50;
 // camera
@@ -186,7 +186,10 @@ int main()
     fp.tp.min_trail = 40;
     fw.init(fp);*/
     
-    Blur blur;
+    //Blur blur;
+
+    Bloom bloom(SCR_HEIGHT, SCR_WIDTH);
+
     // render loop
     // -----------
     while (!glfwWindowShouldClose(window))
@@ -232,7 +235,8 @@ int main()
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        blur.bindFrameBuffer();
+        //blur.bindFrameBuffer();
+        bloom.bindDefaultFBO();
 
         float delta_time = timer();
         deltaTime = delta_time;
@@ -312,7 +316,12 @@ int main()
         // äÖÈ¾Ìì¿ÕºÐ
         sb.draw(skyShader);
 
-        blur.blurTheFrame(BlurShader, ResultShader);
+        //blur.blurTheFrame(BlurShader, ResultShader);
+        bloom.GaussBlur(BlurShader);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        bloom.RanderToScreen(ResultShader);
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

@@ -15,7 +15,7 @@ uniform vec3 viewPos;
 uniform float intensity;
 
 void main()
-{    
+{
     vec3 color = texture(skybox, FragPos).rgb;
     vec3 viewDir = normalize(viewPos - FragPos);
     vec3 normal = normalize(Normal);
@@ -39,12 +39,13 @@ void main()
     }
     vec3 lighting_result = lighting + color * 0.2;
 
-    // »Ô¹âÐ§¹û
+    // ï¿½Ô¹ï¿½Ð§ï¿½ï¿½
     float brightness = dot(lighting_result, vec3(0.2126, 0.7152, 0.0722));
     if(brightness > 1.0)
         BrightColor = vec4(lighting_result, 1.0);
     else
         BrightColor = vec4(0.1, 0.1, 0.1, 1.0);
+    // BrightColor = vec4(0.1, 0.1, 0.1, 1.0);
     FragColor = vec4(lighting_result, 1.0);
 }
 //#version 330 core

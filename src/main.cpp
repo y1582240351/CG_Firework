@@ -135,12 +135,12 @@ int main()
     SkyBox sb;
 
     std::vector<std::string> boxes {
-        std::string("./skybox/starfield_rt.tga"),
-        std::string("./skybox/starfield_rt.tga"),
-        std::string("./skybox/starfield_rt.tga"),
-        std::string("./skybox/starfield_dn.tga"),
-        std::string("./skybox/starfield_ft.tga"),
-        std::string("./skybox/starfield_rt.tga"),
+        std::string("skybox/starfield_rt.tga"),
+        std::string("skybox/starfield_rt.tga"),
+        std::string("skybox/starfield_rt.tga"),
+        std::string("skybox/starfield_dn.tga"),
+        std::string("skybox/starfield_ft.tga"),
+        std::string("skybox/starfield_rt.tga"),
     };
     /*std::vector<std::string> boxes{
        std::string("./skybox/px.jpg"),

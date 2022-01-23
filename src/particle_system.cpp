@@ -129,7 +129,6 @@ void ParticleSystem::draw(Shader& shader) {
 	glVertexAttribDivisor(VERTEX, 0);
 	glVertexAttribDivisor(POS, 1);
 	glVertexAttribDivisor(COLOR, 1);
-	//glVertexAttribDivisor(SIZE, 1);
 	glDrawArraysInstanced(GL_POINTS, 0, 1, particles_num);
 
 	glDisableVertexAttribArray(0);
@@ -169,11 +168,9 @@ void ParticleSystem::initTrailGen(Particle& base_particle, GenParam& param) {
 /// <param name="delta_time">时间间隔</param>
 /// <returns>当前存活粒子的个数</returns>
 int ParticleSystem::trail(float delta_time) {
-	//static bool showed[MAX_PARTICLE_NUM] = { 0 };
 	particles_num = 0;
 	glm::fvec3 a(0.0f, -0.02f, 0.0f); // 加速度
 	float size_atten;
-	//bool tmp = false;
 
 	glm::fvec3 pre_pos;
 
@@ -186,23 +183,14 @@ int ParticleSystem::trail(float delta_time) {
 				particles[i].velocity = velocityUpdate(particles[i].velocity, a, delta_time);
 				/*particles[i].size *= 0.999f;*/
 			}
-			//else if (!showed[i] && !tmp) {
-			//	//glm::fvec3 tmp = particles[i].position;
-			//	particles[i].position = pre_pos;
-			//	//pre_pos = tmp;
-			//	showed[i] = true;
-			//	tmp = true;
-			//}
 			else {
+				// 更新剩余粒子的位置
 				glm::fvec3 tmp = particles[i].position;
 				particles[i].position = pre_pos;
 				pre_pos = tmp;
 				/*showed[i] = true;
 				tmp = true;*/
 			}
-
-			/*size_atten = floatRandom(0.001 * static_cast<float>(i), 0.01 * static_cast<float>(i));
-			particles[i].size *= (1 - size_atten);*/
 
 			particles[i].life -= delta_time;
 

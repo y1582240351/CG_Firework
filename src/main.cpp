@@ -125,22 +125,21 @@ int main()
 
 
     glEnable(GL_PROGRAM_POINT_SIZE);
-    //Shader particleShader("particle_test_vs.glsl", "particle_test_fs.glsl");
-    Shader particleShader("particle_test_vs.glsl", "firework_bloom_fs.glsl");
-    Shader skyShader("skybox_test_vs.glsl", "skybox_text_fs.glsl");
-    Shader BlurShader("Result.vs", "Blur.fs");
-    Shader ResultShader("Result.vs", "Result.fs");
-    Shader CastleShader("model_shader_vs.glsl", "model_shader_fs.glsl");
+    Shader particleShader("../shader/firework_bloom_vs.glsl", "../shader/firework_bloom_fs.glsl");
+    Shader skyShader("../shader/skybox_vs.glsl", "../shader/skybox_fs.glsl");
+    Shader BlurShader("../shader/final_vs.glsl", "../shader/gauss_blur_fs.glsl");
+    Shader ResultShader("../shader/final_vs.glsl", "../shader/final_fs.glsl");
+    Shader CastleShader("../shader/model_vs.glsl", "../shader/model_fs.glsl");
 
     SkyBox sb;
 
     std::vector<std::string> boxes {
-        std::string("skybox/starfield_rt.tga"),
-        std::string("skybox/starfield_rt.tga"),
-        std::string("skybox/starfield_rt.tga"),
-        std::string("skybox/starfield_dn.tga"),
-        std::string("skybox/starfield_ft.tga"),
-        std::string("skybox/starfield_rt.tga"),
+        std::string("../skybox/starfield_rt.tga"),
+        std::string("../skybox/starfield_rt.tga"),
+        std::string("../skybox/starfield_rt.tga"),
+        std::string("../skybox/starfield_dn.tga"),
+        std::string("../skybox/starfield_ft.tga"),
+        std::string("../skybox/starfield_rt.tga"),
     };
     /*std::vector<std::string> boxes{
        std::string("./skybox/px.jpg"),
@@ -163,12 +162,12 @@ int main()
     ImGui_ImplOpenGL3_Init("#version 330");
 
     // ÒôÆµ
-    SoundEngine->play2D("./rise.wav", GL_FALSE);
-    SoundEngine->play2D("./explosion.wav", GL_FALSE);
+    SoundEngine->play2D("../sound/rise.wav", GL_FALSE);
+    SoundEngine->play2D("../sound/explosion.wav", GL_FALSE);
     SoundEngine->stopAllSounds();
-
+    SoundEngine->play2D("../sound/bgm.mp3", GL_FALSE);
     // Ä£ÐÍ
-    Model castle("Castle/Castle OBJ2.obj");
+    Model castle("../Castle/Castle OBJ2.obj");
 
    /* bigfirework fw(4.0f);
     fireworkParam fp;
@@ -383,10 +382,10 @@ void processInput(GLFWwindow* window)
                     newFireWork = new Firework(explode_time,pos,option);
 
                     fireworkParam fp;
-                    fp.trails_num = first_trails_num;
-                    fp.explode_num = explode_num;
-                    fp.tp.max_trail = max_trail;
-                    fp.tp.min_trail = min_trail;
+                    fp.trails_num = first_trails_num/4;
+                    fp.explode_num = explode_num/4;
+                    fp.tp.max_trail = max_trail/4;
+                    fp.tp.min_trail = min_trail/4;
                     newFireWork->init(fp);
                 }
                 else if (i == 3)

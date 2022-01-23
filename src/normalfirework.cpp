@@ -78,7 +78,7 @@
 //		trails[0]->trailGen(delta_time, 0.85, 0.06);
 //		trails[0]->draw(shader);
 //		if (!sound) {
-//			SoundEngine->play2D("./rise.wav", GL_FALSE);
+//			SoundEngine->play2D("../sound/rise.wav", GL_FALSE);
 //			sound = true;
 //		}
 //
@@ -87,7 +87,7 @@
 //		if (!exploded) { // 烟花第一次爆炸
 //			exploded = true;
 //			genTrails();
-//			SoundEngine->play2D("./explosion.wav", GL_FALSE);
+//			SoundEngine->play2D("../sound/explosion.wav", GL_FALSE);
 //		}
 //		//fwp.trails_num
 //		for (int i = 0; i < trails.size(); ++i) {

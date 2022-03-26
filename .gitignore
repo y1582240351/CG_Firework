@@ -16,8 +16,8 @@ obj/
 x64/
 .vs/
 CG-Firework.dir/
-
-
+build/.cmake
+build/build.ninja
 
 *.sln
 *.user
